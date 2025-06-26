@@ -37,7 +37,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${vt323.variable} antialiased h-screen w-screen flex flex-col`}
         style={{
-          backgroundImage: "url('/broadlistening-landing.png')",
+          backgroundImage: "url('/broadlistening-landing.webp')",
           backgroundSize: "cover",
           backgroundPosition: "center center",
           backgroundRepeat: "no-repeat",
