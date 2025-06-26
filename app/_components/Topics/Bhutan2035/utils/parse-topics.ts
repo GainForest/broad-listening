@@ -56,9 +56,7 @@ const parseTopics = (data: any): TTopic[] => {
                   id: quote.id,
                   text: quote.text,
                   authorId: quote.reference.interview,
-                  authorIndex: userIdToIndexMappings.get(
-                    quote.reference.interview
-                  ),
+                  authorIndex: userIdToIndexMappings.get(quote.reference.interview) ?? 0,
                 };
               }),
             };
