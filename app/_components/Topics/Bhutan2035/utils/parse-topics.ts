@@ -24,14 +24,13 @@ const parseTopics = (data: any): TTopic[] => {
   const claimIdToIndexMappings: Map<string, number> = new Map();
   const userIdToIndexMappings: Map<string, number> = new Map();
   const topics = data.data[1].topics;
-  return topics.map((topic: any) => {
+  const result = topics.map((topic: any) => {
     return {
       id: topic.id,
       title: topic.title,
       description: topic.description,
       colorIndex: topic.title.length % TopicColors.length,
       subtopics: topic.subtopics.map((subtopic: any) => {
-        console.log(TopicColors, TopicColors.length);
         return {
           id: subtopic.id,
           title: subtopic.title,
@@ -49,7 +48,7 @@ const parseTopics = (data: any): TTopic[] => {
               quotes: claim.quotes.map((quote: any) => {
                 userIdToIndexMappings.set(
                   quote.reference.interview,
-                  userIdToIndexMappings.get(claim.id) ??
+                  userIdToIndexMappings.get(quote.reference.interview) ??
                     userIdToIndexMappings.size + 1
                 );
                 return {
@@ -57,15 +56,21 @@ const parseTopics = (data: any): TTopic[] => {
                   text: quote.text,
                   authorId: quote.reference.interview,
                   authorIndex:
-                    userIdToIndexMappings.get(quote.reference.interview) ?? 0,
+                    userIdToIndexMappings.get(quote.reference.interview) ??
+                    userIdToIndexMappings.size + 1,
                 };
               }),
             };
           }),
         };
       }),
+      totalPeople: userIdToIndexMappings.size,
+      totalClaims: claimIdToIndexMappings.size,
     };
   });
+
+  console.log("======", result);
+  return result;
 };
 
 export default parseTopics;

@@ -32,6 +32,8 @@ export type TTopic = {
   description: string;
   subtopics: TSubtopic[];
   colorIndex: number;
+  totalClaims: number;
+  totalPeople: number;
 };
 
 export type TDemographics = {

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import TopicItem, { TDemographics, TTopic } from "./TopicItem";
-import { Book, Calendar, MessageCircle, Users } from "lucide-react";
+import { Book, MessageCircle, Users } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 
@@ -56,22 +56,17 @@ export const TopicsDisplay = ({
         <div className="flex items-center gap-3 text-sm text-muted-foreground">
           <span className="flex items-center gap-1">
             <Book className="size-4" />
-            10 Topics
+            {topics.length} Topics
           </span>
           <div className="h-4 w-0.5 bg-muted"></div>
           <span className="flex items-center gap-1">
             <MessageCircle className="size-4" />
-            1000+ claims
+            {topics.at(-1)?.totalClaims} claims
           </span>
           <div className="h-4 w-0.5 bg-muted"></div>
           <span className="flex items-center gap-1">
             <Users className="size-4" />
-            641 People
-          </span>
-          <div className="h-4 w-0.5 bg-muted"></div>
-          <span className="flex items-center gap-1">
-            <Calendar className="size-4" />
-            Feb 9, 2025
+            {topics.at(-1)?.totalPeople} People
           </span>
         </div>
         <span className="flex items-center gap-1">
