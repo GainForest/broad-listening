@@ -37,8 +37,8 @@ export type TTopic = {
 };
 
 export type TDemographics = {
-  gender: Record<string, number>;
-  age: Record<string, number>;
+  gender: Record<string, string>;
+  age: Record<string, string>;
 };
 
 const calculateTotalPeople = (topic: TTopic) => {

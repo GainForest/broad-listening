@@ -96,7 +96,7 @@ export const TopicsDisplay = ({
                 )}
                 onClick={() => updateGenderFilter("male")}
               >
-                Male (8)
+                Male ({demographics.gender.Male?.length || 0})
               </button>
               <button
                 className={cn(
@@ -106,7 +106,7 @@ export const TopicsDisplay = ({
                 )}
                 onClick={() => updateGenderFilter("female")}
               >
-                Female (12)
+                Female ({demographics.gender.Female?.length || 0})
               </button>
             </div>
           </div>
@@ -121,7 +121,7 @@ export const TopicsDisplay = ({
                 )}
                 onClick={() => updateAgeFilter("18-24")}
               >
-                18-24 (12)
+                18-24 ({demographics.age.age_18_25?.length || 0})
               </button>
               <button
                 className={cn(
@@ -131,7 +131,7 @@ export const TopicsDisplay = ({
                 )}
                 onClick={() => updateAgeFilter("25-35")}
               >
-                25-35 (12)
+                25-35 ({demographics.age.age_25_35?.length || 0})
               </button>
               <button
                 className={cn(
@@ -141,7 +141,7 @@ export const TopicsDisplay = ({
                 )}
                 onClick={() => updateAgeFilter("35-50")}
               >
-                35-50 (12)
+                35-50 ({demographics.age.age_35_55?.length || 0})
               </button>
               <button
                 className={cn(
@@ -151,7 +151,7 @@ export const TopicsDisplay = ({
                 )}
                 onClick={() => updateAgeFilter("50+")}
               >
-                50+ (12)
+                50+ ({demographics.age.over_55?.length || 0})
               </button>
             </div>
           </div>
@@ -165,7 +165,6 @@ export const TopicsDisplay = ({
                 key={topic.title}
                 data={topic}
                 demographics={demographics}
-                mode={mode}
               />
             );
           })}
