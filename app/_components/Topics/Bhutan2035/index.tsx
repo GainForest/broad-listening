@@ -2,7 +2,7 @@ import { Book, Calendar, MessageCircle, Users } from "lucide-react";
 import TopicItem from "./ClaimTopicItem";
 import parseTopics from "./utils/parse-topics";
 
-const ClaimTopics = async () => {
+const Bhutan2035 = async () => {
   const data = await fetch(
     "https://storage.googleapis.com/tttc-light-dev/7b8e53b8761a649f18f4343d0b13c34093c01957c91c72ed90f7052a04cc0b9b"
   );
@@ -41,4 +41,4 @@ const ClaimTopics = async () => {
   );
 };
 
-export default ClaimTopics;
+export default Bhutan2035;

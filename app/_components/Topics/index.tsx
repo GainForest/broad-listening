@@ -1,11 +1,11 @@
 import { Info } from "lucide-react";
 import React from "react";
-import ClaimTopics from "./ClaimTopics";
+import Bhutan2035 from "./Bhutan2035";
 
 const Topics = () => {
   return (
     <div className="flex flex-col gap-2">
-      <h2 className="text-2xl font-bold">Bhutan NDI Demo</h2>
+      <h2 className="text-2xl font-bold">Bhutan 2035</h2>
       <div className="flex flex-col gap-0.5">
         <h3 className="text-xl font-bold">Summary</h3>
         <span className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -22,7 +22,7 @@ const Topics = () => {
           numquam fugit officia esse.
         </p>
       </div>
-      <ClaimTopics />
+      <Bhutan2035 />
     </div>
   );
 };
