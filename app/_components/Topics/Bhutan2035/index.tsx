@@ -1,5 +1,5 @@
 import { Book, Calendar, MessageCircle, Users } from "lucide-react";
-import TopicItem from "./ClaimTopicItem";
+import TopicItem, { TClaim, TQuote, TSubtopic, TTopic } from "./ClaimTopicItem";
 import parseTopics from "./utils/parse-topics";
 
 // Function to get the base URL for API calls
@@ -13,45 +13,20 @@ const getBaseUrl = () => {
 };
 
 // Function to find all author IDs within topics and subtopics
-const findAuthorIdsInTopics = (topics: any[]) => {
+const findAuthorIdsInTopics = (topics: TTopic[]) => {
   const authorIds = new Set<string>();
   
   topics.forEach(topic => {
-    topic.subtopics.forEach((subtopic: any) => {
-      subtopic.claims.forEach((claim: any) => {
-        claim.quotes.forEach((quote: any) => {
-          authorIds.add(quote.reference.interview);
+    topic.subtopics.forEach((subtopic: TSubtopic) => {
+      subtopic.claims.forEach((claim: TClaim) => {
+        claim.quotes.forEach((quote: TQuote) => {
+          authorIds.add(quote.authorId);
         });
       });
     });
   });
   
   return Array.from(authorIds);
-};
-
-// Function to check if a specific author ID exists in topics
-const checkAuthorIdInTopics = (topics: any[], targetAuthorId: string) => {
-  const foundIn: Array<{topicId: string, topicTitle: string, subtopicId: string, subtopicTitle: string, claimId: string}> = [];
-  
-  topics.forEach(topic => {
-    topic.subtopics.forEach((subtopic: any) => {
-      subtopic.claims.forEach((claim: any) => {
-        claim.quotes.forEach((quote: any) => {
-          if (quote.reference.interview === targetAuthorId) {
-            foundIn.push({
-              topicId: topic.id,
-              topicTitle: topic.title,
-              subtopicId: subtopic.id,
-              subtopicTitle: subtopic.title,
-              claimId: claim.id
-            });
-          }
-        });
-      });
-    });
-  });
-  
-  return foundIn;
 };
 
 const Bhutan2035 = async () => {

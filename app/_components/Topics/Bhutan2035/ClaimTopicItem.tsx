@@ -71,6 +71,7 @@ const calculateTotalPeople = (topic: TTopic) => {
 
 const TopicItem = ({ data, demographics }: { data: TTopic, demographics: TDemographics }) => {
 
+  console.log(demographics);
   const allAuthorIds = findAuthorIdsInTopic(data);
   console.log("All author IDs found:", allAuthorIds);
 
