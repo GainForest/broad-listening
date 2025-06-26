@@ -2,8 +2,8 @@
 import { TTopic, TopicColors } from "../ClaimTopicItem";
 
 const parseTopics = (data: any): TTopic[] => {
-  const claimIdToIndexMappings: Record<string, number> = {};
-  const userIdToIndexMappings: Record<string, number> = {};
+  const claimIdToIndexMappings: Map<string, number> = new Map();
+  const userIdToIndexMappings: Map<string, number> = new Map();
   const topics = data.data[1].topics;
   return topics.map((topic: any) => {
     return {
@@ -17,21 +17,28 @@ const parseTopics = (data: any): TTopic[] => {
           title: subtopic.title,
           description: subtopic.description,
           claims: subtopic.claims.map((claim: any) => {
-            claimIdToIndexMappings[claim.id] =
-              claimIdToIndexMappings[claim.id] || claimIdToIndexMappings.length;
+            claimIdToIndexMappings.set(
+              claim.id,
+              claimIdToIndexMappings.get(claim.id) ??
+                claimIdToIndexMappings.size + 1
+            );
             return {
-              index: claimIdToIndexMappings[claim.id],
+              index: claimIdToIndexMappings.get(claim.id),
               id: claim.id,
-              content: claim.content,
+              content: claim.title,
               quotes: claim.quotes.map((quote: any) => {
-                userIdToIndexMappings[quote.reference.id] =
-                  userIdToIndexMappings[quote.reference.id] ||
-                  userIdToIndexMappings.length;
+                userIdToIndexMappings.set(
+                  quote.reference.interview,
+                  userIdToIndexMappings.get(claim.id) ??
+                    userIdToIndexMappings.size + 1
+                );
                 return {
                   id: quote.id,
                   text: quote.text,
-                  authorId: quote.interview,
-                  authorIndex: userIdToIndexMappings[quote.reference.id],
+                  authorId: quote.reference.interview,
+                  authorIndex: userIdToIndexMappings.get(
+                    quote.reference.interview
+                  ),
                 };
               }),
             };

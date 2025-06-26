@@ -13,6 +13,7 @@ const ClaimBoxes = ({ data }: { data: TTopic }) => {
             <ClaimPopup
               key={claim.id}
               data={claim}
+              colorIndex={data.colorIndex}
               asChild
               trigger={
                 <button

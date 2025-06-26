@@ -4,24 +4,23 @@ import ClaimPopup from "./ClaimPopup";
 import ClaimBoxes from "./ClaimBoxes";
 
 export const TopicColors = [
-  [239, 68, 68], // red-500
-  [249, 115, 22], // orange-500
-  [234, 88, 12], // amber-500
-  [202, 138, 4], // yellow-500
-  [132, 204, 22], // lime-500
-  [34, 197, 94], // green-500
-  [14, 159, 110], // emerald-500
-  [6, 182, 212], // teal-500
-  [20, 184, 166], // cyan-500
-  [14, 165, 233], // sky-500
-  [59, 130, 246], // blue-500
-  [99, 102, 241], // indigo-500
-  [139, 92, 246], // violet-500
-  [168, 85, 247], // purple-500
-  [217, 70, 239], // fuchsia-500
-  [236, 72, 153], // pink-500
-  [244, 63, 94], // rose-500
-  [115, 115, 115], // neutral-500
+  [185, 28, 28], // red-700
+  [194, 65, 12], // orange-700
+  [180, 83, 9], // amber-700
+  [161, 98, 7], // yellow-700
+  [101, 163, 13], // lime-700
+  [21, 128, 61], // green-700
+  [4, 120, 87], // emerald-700
+  [15, 118, 110], // teal-700
+  [14, 116, 144], // cyan-700
+  [2, 132, 199], // sky-700
+  [29, 78, 216], // blue-700
+  [67, 56, 202], // indigo-700
+  [109, 40, 217], // violet-700
+  [126, 34, 206], // purple-700
+  [192, 38, 211], // fuchsia-700
+  [190, 24, 93], // pink-700
+  [190, 18, 60], // rose-700
 ];
 
 export type TQuote = {
@@ -89,6 +88,7 @@ const TopicItem = ({ data }: { data: TTopic }) => {
             <ClaimPopup
               key={index}
               data={subtopic.claims[0]}
+              colorIndex={data.colorIndex}
               asChild
               trigger={
                 <a
