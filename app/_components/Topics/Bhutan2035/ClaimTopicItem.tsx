@@ -52,6 +52,11 @@ export type TTopic = {
   colorIndex: number;
 };
 
+export type TDemographics = {
+  gender: Record<string, number>;
+  age: Record<string, number>;
+};
+
 const calculateTotalPeople = (topic: TTopic) => {
   const people = new Set<string>();
   topic.subtopics.forEach((subtopic) => {
@@ -64,7 +69,11 @@ const calculateTotalPeople = (topic: TTopic) => {
   return people.size;
 };
 
-const TopicItem = ({ data }: { data: TTopic }) => {
+const TopicItem = ({ data, demographics }: { data: TTopic, demographics: TDemographics }) => {
+
+  const allAuthorIds = findAuthorIdsInTopic(data);
+  console.log("All author IDs found:", allAuthorIds);
+
   const totalClaims = data.subtopics.reduce((acc, subtopic) => {
     return acc + subtopic.claims.length;
   }, 0);
@@ -120,3 +129,18 @@ const TopicItem = ({ data }: { data: TTopic }) => {
 };
 
 export default TopicItem;
+
+// Function to find all author IDs within a single topic and its subtopics
+const findAuthorIdsInTopic = (topic: TTopic) => {
+  const authorIds = new Set<string>();
+
+  topic.subtopics.forEach((subtopic: TSubtopic) => {
+    subtopic.claims.forEach((claim: TClaim) => {
+      claim.quotes.forEach((quote: TQuote) => {
+        authorIds.add(quote.authorId);
+      });
+    });
+  });
+
+  return Array.from(authorIds);
+};

@@ -19,7 +19,7 @@ export async function GET() {
       age_35_55: [] as string[],
       over_55: [] as string[],
     };
-
+ 
     for (const row of rows) {
       const dob = new Date(row.date_of_birth);
       let age = today.getFullYear() - dob.getFullYear();
