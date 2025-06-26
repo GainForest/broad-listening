@@ -3,6 +3,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { TClaim } from "./ClaimTopicItem";
 import { blo } from "blo";
 import { Quote } from "lucide-react";
 import React from "react";
@@ -10,9 +11,11 @@ import React from "react";
 const ClaimPopup = ({
   trigger,
   asChild,
+  data,
 }: {
   trigger: React.ReactNode;
   asChild?: boolean;
+  data: TClaim;
 }) => {
   return (
     <Tooltip>
@@ -20,10 +23,10 @@ const ClaimPopup = ({
       <TooltipContent>
         <div className="w-[80vw] sm:w-[300px] flex flex-col gap-4">
           <div className="flex flex-col gap-0.5">
-            <span className="text-xs text-muted-foreground">Claim #1</span>
-            <span className="text-sm text-wrap">
-              This is the very first claim. This is the very first claim.
+            <span className="text-xs text-muted-foreground">
+              Claim #{data.id}
             </span>
+            <span className="text-sm text-wrap">{data.content}</span>
           </div>
           <hr />
           <div>
@@ -41,7 +44,7 @@ const ClaimPopup = ({
               <img src={blo("0x123")} />
             </div>
             <div className="flex flex-col">
-              <span className="font-bold">0xdid_of_user</span>
+              <span className="font-bold">{}</span>
               <span className="text-muted-foreground">Male • 13yo</span>
             </div>
           </div>

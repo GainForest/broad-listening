@@ -28,10 +28,12 @@ export type TQuote = {
   id: string;
   text: string;
   authorId: string;
+  authorIndex: number;
 };
 
 export type TClaim = {
   id: string;
+  index: number;
   content: string;
   quotes: TQuote[];
 };
@@ -86,6 +88,7 @@ const TopicItem = ({ data }: { data: TTopic }) => {
           return (
             <ClaimPopup
               key={index}
+              data={subtopic.claims[0]}
               asChild
               trigger={
                 <a
