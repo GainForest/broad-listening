@@ -131,7 +131,7 @@ const ClaimPopup = ({
                 <img src={blo(`0x${authorId}`)} />
               </div>
               <div className="flex flex-col">
-                <span className="font-bold">{authorId}</span>
+                <span className="font-bold">{authorId?.substring(0, 8)}</span>
                 <span className="text-muted-foreground">
                   {authorGender && authorAgeGroup 
                     ? `${authorGender} • ${formatAgeGroup(authorAgeGroup)} years old`

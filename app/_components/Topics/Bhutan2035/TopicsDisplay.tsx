@@ -165,6 +165,10 @@ export const TopicsDisplay = ({
                 key={topic.title}
                 data={topic}
                 demographics={demographics}
+                filter={mode === "demographics" ? {
+                  gender: Array.from(genderFilter),
+                  age: Array.from(ageFilter)
+                } : undefined}
               />
             );
           })}

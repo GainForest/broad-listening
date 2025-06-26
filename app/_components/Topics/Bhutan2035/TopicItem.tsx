@@ -56,9 +56,14 @@ const calculateTotalPeople = (topic: TTopic) => {
 const TopicItem = ({
   data,
   demographics,
+  filter,
 }: {
   data: TTopic;
   demographics: TDemographics;
+  filter?: {
+    gender: string[];
+    age: string[];
+  };
 }) => {
   const [highlightedSubtopicId, setHighlightedSubtopicId] = useState<
     string | null
@@ -74,7 +79,7 @@ const TopicItem = ({
   return (
     <div className="p-3 flex flex-col md:flex-row gap-3">
       <div className="flex-1">
-        <ClaimBoxes data={data} highlightedSubtopicId={highlightedSubtopicId} demographics={demographics}/>
+        <ClaimBoxes data={data} highlightedSubtopicId={highlightedSubtopicId} demographics={demographics} filter={filter}/>
       </div>
       <div className="flex-1">
         <h4 className="font-bold">{data.title}</h4>
@@ -124,18 +129,3 @@ const TopicItem = ({
 };
 
 export default TopicItem;
-
-// Function to find all author IDs within a single topic and its subtopics
-// const findAuthorIdsInTopic = (topic: TTopic) => {
-//   const authorIds = new Set<string>();
-
-//   topic.subtopics.forEach((subtopic: TSubtopic) => {
-//     subtopic.claims.forEach((claim: TClaim) => {
-//       claim.quotes.forEach((quote: TQuote) => {
-//         authorIds.add(quote.authorId);
-//       });
-//     });
-//   });
-
-//   return Array.from(authorIds);
-// };
