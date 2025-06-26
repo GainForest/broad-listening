@@ -1,6 +1,7 @@
 import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { FaTelegram } from "react-icons/fa6";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -23,10 +24,12 @@ export default function Home() {
         }}
       >
         Meet TakinAI, your guide to imagining Bhutan&apos;s digital future.{" "}
-        <Button className="w-full mt-2 h-10">
-          <FaTelegram />
-          Talk to TakinAI on Telegram
-        </Button>
+        <Link href="https://t.me/TakinAIBot" target="_blank">
+          <Button className="w-full mt-2 h-10">
+            <FaTelegram />
+            Talk to TakinAI on Telegram
+          </Button>
+        </Link>
       </div>
     </Container>
   );
