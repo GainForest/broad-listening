@@ -8,6 +8,7 @@ const Bhutan2035 = async () => {
   );
   const json = await data.json();
   const topics = parseTopics(json);
+  console.log(topics);
   return (
     <div className="flex flex-col gap-0.5">
       <h3 className="text-xl font-bold">Claims</h3>

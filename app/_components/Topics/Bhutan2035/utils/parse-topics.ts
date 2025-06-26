@@ -1,5 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { TTopic, TopicColors } from "../ClaimTopicItem";
+import { TTopic } from "../ClaimTopicItem";
+export const TopicColors = [
+  [185, 28, 28], // red-700
+  [194, 65, 12], // orange-700
+  [180, 83, 9], // amber-700
+  [161, 98, 7], // yellow-700
+  [101, 163, 13], // lime-700
+  [21, 128, 61], // green-700
+  [4, 120, 87], // emerald-700
+  [15, 118, 110], // teal-700
+  [14, 116, 144], // cyan-700
+  [2, 132, 199], // sky-700
+  [29, 78, 216], // blue-700
+  [67, 56, 202], // indigo-700
+  [109, 40, 217], // violet-700
+  [126, 34, 206], // purple-700
+  [192, 38, 211], // fuchsia-700
+  [190, 24, 93], // pink-700
+  [190, 18, 60], // rose-700
+];
 
 const parseTopics = (data: any): TTopic[] => {
   const claimIdToIndexMappings: Map<string, number> = new Map();
@@ -10,8 +29,9 @@ const parseTopics = (data: any): TTopic[] => {
       id: topic.id,
       title: topic.title,
       description: topic.description,
-      colorIndex: Math.floor(Math.random() * TopicColors.length),
+      colorIndex: topic.title.length % TopicColors.length,
       subtopics: topic.subtopics.map((subtopic: any) => {
+        console.log(TopicColors, TopicColors.length);
         return {
           id: subtopic.id,
           title: subtopic.title,

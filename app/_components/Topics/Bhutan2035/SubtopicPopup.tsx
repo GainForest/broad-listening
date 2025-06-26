@@ -1,3 +1,4 @@
+"use client";
 import {
   Tooltip,
   TooltipContent,
@@ -6,24 +7,47 @@ import {
 import { TClaim } from "./ClaimTopicItem";
 import { TopicColors } from "./utils/parse-topics";
 import { blo } from "blo";
-import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { Quote } from "lucide-react";
 import React from "react";
 
-const ClaimPopup = ({
+const SubtopicPopup = ({
   trigger,
   asChild,
   data,
   colorIndex,
+  onHoverStart,
+  onHoverEnd,
 }: {
   trigger: React.ReactNode;
   asChild?: boolean;
   data: TClaim;
   colorIndex: number;
+  onHoverStart: () => void;
+  onHoverEnd: () => void;
 }) => {
   return (
-    <Tooltip>
-      <TooltipTrigger asChild={asChild}>{trigger}</TooltipTrigger>
-      <TooltipContent>
+    <Tooltip
+      onOpenChange={(open) => {
+        if (open) {
+          onHoverStart();
+        } else {
+          onHoverEnd();
+        }
+      }}
+    >
+      <TooltipTrigger
+        asChild={asChild}
+        onMouseEnter={onHoverStart}
+        onMouseMove={onHoverStart}
+        onMouseLeave={onHoverEnd}
+      >
+        {trigger}
+      </TooltipTrigger>
+      <TooltipContent
+        onMouseEnter={onHoverStart}
+        onMouseMove={onHoverStart}
+        onMouseLeave={onHoverEnd}
+      >
         <div className="w-[80vw] sm:w-[300px] flex flex-col gap-4 text-wrap">
           <div className="flex flex-col gap-0.5">
             <span className="text-xs text-muted-foreground font-bold">
@@ -54,36 +78,29 @@ const ClaimPopup = ({
           </div>
           <hr />
           <div>
-            <div className="flex items-center justify-between gap-1 text-muted-foreground">
-              <div className="flex items-center">
-                <Quote className="size-4" />
-                <span>Quotes</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <button className="rounded-full border border-border">
-                  <ChevronLeft className="size-4" />
-                </button>
-                <span>1/1</span>
-                <button className="rounded-full border border-border">
-                  <ChevronRight className="size-4" />
-                </button>
-              </div>
+            <div className="flex items-center gap-1 text-muted-foreground">
+              <Quote className="size-4" />
+              <span>Quotes</span>
             </div>
             <div className="mt-2">
               {data.quotes.map((quote) => (
                 <div key={quote.id}>
                   <q className="text-sm italic">{quote.text}</q>
+                  <span className="text-muted-foreground">
+                    - {quote.authorIndex}
+                  </span>
                 </div>
               ))}
             </div>
-            <div className="flex items-center gap-2 mb-0.5 mt-1">
-              <div className="h-5 w-5 rounded-full border border-border overflow-hidden">
-                <img src={blo("0x123")} />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-bold">{}</span>
-                <span className="text-muted-foreground">Male • 13yo</span>
-              </div>
+          </div>
+          {/* <hr /> */}
+          <div className="flex items-center gap-2 mb-0.5">
+            <div className="h-8 w-8 rounded-full border border-border overflow-hidden">
+              <img src={blo("0x123")} />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold">{}</span>
+              <span className="text-muted-foreground">Male • 13yo</span>
             </div>
           </div>
         </div>{" "}
@@ -92,4 +109,4 @@ const ClaimPopup = ({
   );
 };
 
-export default ClaimPopup;
+export default SubtopicPopup;

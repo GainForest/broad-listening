@@ -1,27 +1,9 @@
+"use client";
 import { MessageCircle } from "lucide-react";
-import React from "react";
-import ClaimPopup from "./ClaimPopup";
+import React, { useState } from "react";
 import ClaimBoxes from "./ClaimBoxes";
-
-export const TopicColors = [
-  [185, 28, 28], // red-700
-  [194, 65, 12], // orange-700
-  [180, 83, 9], // amber-700
-  [161, 98, 7], // yellow-700
-  [101, 163, 13], // lime-700
-  [21, 128, 61], // green-700
-  [4, 120, 87], // emerald-700
-  [15, 118, 110], // teal-700
-  [14, 116, 144], // cyan-700
-  [2, 132, 199], // sky-700
-  [29, 78, 216], // blue-700
-  [67, 56, 202], // indigo-700
-  [109, 40, 217], // violet-700
-  [126, 34, 206], // purple-700
-  [192, 38, 211], // fuchsia-700
-  [190, 24, 93], // pink-700
-  [190, 18, 60], // rose-700
-];
+import SubtopicPopup from "./SubtopicPopup";
+import { TopicColors } from "./utils/parse-topics";
 
 export type TQuote = {
   id: string;
@@ -65,14 +47,18 @@ const calculateTotalPeople = (topic: TTopic) => {
 };
 
 const TopicItem = ({ data }: { data: TTopic }) => {
+  const [highlightedSubtopicId, setHighlightedSubtopicId] = useState<
+    string | null
+  >(null);
   const totalClaims = data.subtopics.reduce((acc, subtopic) => {
     return acc + subtopic.claims.length;
   }, 0);
   const totalPeople = calculateTotalPeople(data);
+
   return (
     <div className="p-3 flex flex-col md:flex-row gap-3">
       <div className="flex-1">
-        <ClaimBoxes data={data} />
+        <ClaimBoxes data={data} highlightedSubtopicId={highlightedSubtopicId} />
       </div>
       <div className="flex-1">
         <h4 className="font-bold">{data.title}</h4>
@@ -85,11 +71,13 @@ const TopicItem = ({ data }: { data: TTopic }) => {
         {data.subtopics.map((subtopic, index) => {
           if (index > 4) return null;
           return (
-            <ClaimPopup
+            <SubtopicPopup
               key={index}
               data={subtopic.claims[0]}
               colorIndex={data.colorIndex}
               asChild
+              onHoverStart={() => setHighlightedSubtopicId(subtopic.id)}
+              onHoverEnd={() => setHighlightedSubtopicId(null)}
               trigger={
                 <a
                   key={subtopic.title}

@@ -1,14 +1,24 @@
 import React from "react";
-import { TTopic, TopicColors } from "./ClaimTopicItem";
+import { TTopic } from "./ClaimTopicItem";
+import { TopicColors } from "./utils/parse-topics";
 import ClaimPopup from "./ClaimPopup";
+import { cn } from "@/lib/utils";
 
-const ClaimBoxes = ({ data }: { data: TTopic }) => {
+const ClaimBoxes = ({
+  data,
+  highlightedSubtopicId,
+}: {
+  data: TTopic;
+  highlightedSubtopicId: string | null;
+}) => {
   let claimNumber = 0;
   return (
     <div className="flex flex-wrap items-center gap-2">
       {data.subtopics.map((subtopic) => {
         return subtopic.claims.map((claim) => {
           claimNumber += 1;
+
+          const isHighlighted = highlightedSubtopicId === subtopic.id;
           return (
             <ClaimPopup
               key={claim.id}
@@ -24,12 +34,20 @@ const ClaimBoxes = ({ data }: { data: TTopic }) => {
                   }}
                 >
                   <div
-                    className="absolute inset-0 hidden group-hover:block z-10"
+                    className={cn(
+                      "absolute inset-0 hidden group-hover:block z-10",
+                      isHighlighted ? "block" : "hidden"
+                    )}
                     style={{
                       background: `rgb(${TopicColors[data.colorIndex]})`,
                     }}
                   ></div>
-                  <span className="group-hover:text-white text-[0.6rem] relative z-20">
+                  <span
+                    className={cn(
+                      "group-hover:text-white text-[0.6rem] relative z-20",
+                      isHighlighted ? "text-white" : ""
+                    )}
+                  >
                     {claimNumber}
                   </span>
                 </button>
