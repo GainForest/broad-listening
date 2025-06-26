@@ -1,6 +1,7 @@
 import { Book, Calendar, MessageCircle, Users } from "lucide-react";
-import TopicItem, { TClaim, TQuote, TSubtopic, TTopic } from "./ClaimTopicItem";
+import TopicItem, { TClaim, TDemographics, TQuote, TSubtopic, TTopic } from "./ClaimTopicItem";
 import parseTopics from "./utils/parse-topics";
+import { DisplayTopicsOrDemographics } from "./Display";
 
 // Function to get the base URL for API calls
 const getBaseUrl = () => {
@@ -36,11 +37,6 @@ const Bhutan2035 = async () => {
   const json = await data.json();
   const topics = parseTopics(json);
 
-  // Find all unique author IDs in the topics
-  const allAuthorIds = findAuthorIdsInTopics(json.data[1].topics);
-  console.log("All author IDs found:", allAuthorIds);
-  console.log("Total unique authors:", allAuthorIds.length);
-
   // Example: Check for a specific author ID (replace with actual ID you want to check)
   // const specificAuthorId = "your-author-id-here";
   // const authorLocations = checkAuthorIdInTopics(json.data[1].topics, specificAuthorId);
@@ -49,7 +45,6 @@ const Bhutan2035 = async () => {
   // query for the demographics data
   const baseUrl = getBaseUrl();
 
-  console.log("Base URL:", baseUrl);
   const [genderData, ageData] = await Promise.all([
     fetch(`${baseUrl}/api/profile/gender-groups`),
     fetch(`${baseUrl}/api/profile/age-groups`),
@@ -58,15 +53,11 @@ const Bhutan2035 = async () => {
   const genderJson = await genderData.json();
   const ageJson = await ageData.json();
 
-  console.log("Gender groups:", genderJson);
-  console.log("Age groups:", ageJson);
-
   const demographics = {
     gender: genderJson,
     age: ageJson,
   };
 
-  console.log(topics);
   return (
     <div className="flex flex-col gap-0.5">
       <h3 className="text-xl font-bold">Claims</h3>
@@ -91,6 +82,7 @@ const Bhutan2035 = async () => {
           Feb 9, 2025
         </span>
       </div>
+      <DisplayTopicsOrDemographics topics={topics} demographics={demographics}/>
       <div className="flex flex-col border border-border rounded-xl divide-y mt-3">
         {topics.map((topic) => {
           return (
