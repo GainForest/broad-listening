@@ -5,7 +5,7 @@ import React from "react";
 
 const DashboardPage = () => {
   return (
-    <Container>
+    <Container className="flex flex-col gap-4">
       <Stats />
       <Topics />
     </Container>

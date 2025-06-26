@@ -1,52 +1,13 @@
 import { Book, Calendar, MessageCircle, Users } from "lucide-react";
-import ClaimTopicItem from "./ClaimTopicItem";
+import TopicItem from "./ClaimTopicItem";
+import parseTopics from "./utils/parse-topics";
 
-const claimTopics = [
-  {
-    title: "Topic 1",
-    claims: 10,
-    people: 10,
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    subtopics: [
-      {
-        title: "Subtopic 1",
-      },
-      {
-        title: "Subtopic 2",
-      },
-      {
-        title: "Subtopic 3",
-      },
-    ],
-  },
-  {
-    title: "Topic 2",
-    claims: 10,
-    people: 10,
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    subtopics: [
-      {
-        title: "Subtopic 1",
-      },
-      {
-        title: "Subtopic 2",
-      },
-      {
-        title: "Subtopic 3",
-      },
-      {
-        title: "Subtopic 4",
-      },
-      {
-        title: "Subtopic 5",
-      },
-    ],
-  },
-];
-
-const ClaimTopics = () => {
+const ClaimTopics = async () => {
+  const data = await fetch(
+    "https://storage.googleapis.com/tttc-light-dev/7b8e53b8761a649f18f4343d0b13c34093c01957c91c72ed90f7052a04cc0b9b"
+  );
+  const json = await data.json();
+  const topics = parseTopics(json);
   return (
     <div className="flex flex-col gap-0.5">
       <h3 className="text-xl font-bold">Claims</h3>
@@ -72,8 +33,8 @@ const ClaimTopics = () => {
         </span>
       </div>
       <div className="flex flex-col border border-border rounded-xl divide-y mt-3">
-        {claimTopics.map((topic) => {
-          return <ClaimTopicItem key={topic.title} data={topic} />;
+        {topics.map((topic) => {
+          return <TopicItem key={topic.title} data={topic} />;
         })}
       </div>
     </div>
