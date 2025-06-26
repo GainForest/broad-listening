@@ -14,7 +14,7 @@ export type TClaimTopic = {
 
 const ClaimTopicItem = ({ data }: { data: TClaimTopic }) => {
   return (
-    <div className="p-3 flex gap-3">
+    <div className="p-3 flex flex-col md:flex-row gap-3">
       <div className="flex-1">
         <div className="flex flex-wrap items-center gap-2">
           {Array.from({ length: data.claims }).map((_, index) => {
