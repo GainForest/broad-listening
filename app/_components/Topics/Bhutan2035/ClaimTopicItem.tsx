@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import ClaimBoxes from "./ClaimBoxes";
 import SubtopicPopup from "./SubtopicPopup";
 import { TopicColors } from "./utils/parse-topics";
+import { ClaimStatistics } from "./ClaimStatistics";
 
 export type TQuote = {
   id: string;
@@ -54,17 +55,18 @@ const calculateTotalPeople = (topic: TTopic) => {
 const TopicItem = ({
   data,
   demographics,
+  toggleDemographics,
 }: {
   data: TTopic;
   demographics: TDemographics;
+  toggleDemographics: boolean;
 }) => {
+  
   const [highlightedSubtopicId, setHighlightedSubtopicId] = useState<
     string | null
   >(null);
 
-  console.log(demographics);
   const allAuthorIds = findAuthorIdsInTopic(data);
-  console.log("All author IDs found:", allAuthorIds);
 
   const totalClaims = data.subtopics.reduce((acc, subtopic) => {
     return acc + subtopic.claims.length;
@@ -74,7 +76,7 @@ const TopicItem = ({
   return (
     <div className="p-3 flex flex-col md:flex-row gap-3">
       <div className="flex-1">
-        <ClaimBoxes data={data} highlightedSubtopicId={highlightedSubtopicId} />
+        {toggleDemographics ? <ClaimStatistics demographics={demographics} data={data} /> : <ClaimBoxes data={data} highlightedSubtopicId={highlightedSubtopicId} />}
       </div>
       <div className="flex-1">
         <h4 className="font-bold">{data.title}</h4>
