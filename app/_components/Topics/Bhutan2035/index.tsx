@@ -1,7 +1,5 @@
-import { Book, Calendar, MessageCircle, Users } from "lucide-react";
-import TopicItem, { TClaim, TDemographics, TQuote, TSubtopic, TTopic } from "./ClaimTopicItem";
 import parseTopics from "./utils/parse-topics";
-import { DisplayTopicsOrDemographics } from "./Display";
+import { TopicsDisplay } from "./TopicsDisplay";
 
 // Function to get the base URL for API calls
 const getBaseUrl = () => {
@@ -14,21 +12,21 @@ const getBaseUrl = () => {
 };
 
 // Function to find all author IDs within topics and subtopics
-const findAuthorIdsInTopics = (topics: TTopic[]) => {
-  const authorIds = new Set<string>();
+// const findAuthorIdsInTopics = (topics: TTopic[]) => {
+//   const authorIds = new Set<string>();
 
-  topics.forEach((topic) => {
-    topic.subtopics.forEach((subtopic: TSubtopic) => {
-      subtopic.claims.forEach((claim: TClaim) => {
-        claim.quotes.forEach((quote: TQuote) => {
-          authorIds.add(quote.authorId);
-        });
-      });
-    });
-  });
+//   topics.forEach((topic) => {
+//     topic.subtopics.forEach((subtopic: TSubtopic) => {
+//       subtopic.claims.forEach((claim: TClaim) => {
+//         claim.quotes.forEach((quote: TQuote) => {
+//           authorIds.add(quote.authorId);
+//         });
+//       });
+//     });
+//   });
 
-  return Array.from(authorIds);
-};
+//   return Array.from(authorIds);
+// };
 
 const Bhutan2035 = async () => {
   const data = await fetch(
@@ -37,12 +35,6 @@ const Bhutan2035 = async () => {
   const json = await data.json();
   const topics = parseTopics(json);
 
-  // Example: Check for a specific author ID (replace with actual ID you want to check)
-  // const specificAuthorId = "your-author-id-here";
-  // const authorLocations = checkAuthorIdInTopics(json.data[1].topics, specificAuthorId);
-  // console.log(`Author ${specificAuthorId} found in:`, authorLocations);
-
-  // query for the demographics data
   const baseUrl = getBaseUrl();
 
   const [genderData, ageData] = await Promise.all([
@@ -58,33 +50,7 @@ const Bhutan2035 = async () => {
     age: ageJson,
   };
 
-  return (
-    <div className="flex flex-col gap-0.5">
-      <h3 className="text-xl font-bold">Claims</h3>
-      <div className="flex items-center gap-3 text-sm text-muted-foreground">
-        <span className="flex items-center gap-1">
-          <Book className="size-4" />
-          10 Topics
-        </span>
-        <div className="h-4 w-0.5 bg-muted"></div>
-        <span className="flex items-center gap-1">
-          <MessageCircle className="size-4" />
-          1000+ claims
-        </span>
-        <div className="h-4 w-0.5 bg-muted"></div>
-        <span className="flex items-center gap-1">
-          <Users className="size-4" />
-          641 People
-        </span>
-        <div className="h-4 w-0.5 bg-muted"></div>
-        <span className="flex items-center gap-1">
-          <Calendar className="size-4" />
-          Feb 9, 2025
-        </span>
-      </div>
-      <DisplayTopicsOrDemographics topics={topics} demographics={demographics}/>
-    </div>
-  );
+  return <TopicsDisplay topics={topics} demographics={demographics} />;
 };
 
 export default Bhutan2035;

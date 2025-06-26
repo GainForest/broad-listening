@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { TTopic } from "../ClaimTopicItem";
+import { TTopic } from "../TopicItem";
 export const TopicColors = [
   [185, 28, 28], // red-700
   [194, 65, 12], // orange-700
@@ -56,7 +56,8 @@ const parseTopics = (data: any): TTopic[] => {
                   id: quote.id,
                   text: quote.text,
                   authorId: quote.reference.interview,
-                  authorIndex: userIdToIndexMappings.get(quote.reference.interview) ?? 0,
+                  authorIndex:
+                    userIdToIndexMappings.get(quote.reference.interview) ?? 0,
                 };
               }),
             };

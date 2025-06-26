@@ -1,5 +1,5 @@
 import React from "react";
-import { TTopic } from "./ClaimTopicItem";
+import { TTopic } from "./TopicItem";
 import { TopicColors } from "./utils/parse-topics";
 import ClaimPopup from "./ClaimPopup";
 import { cn } from "@/lib/utils";
@@ -31,7 +31,9 @@ const ClaimBoxes = ({
                 <button
                   className={cn(
                     "relative group flex items-center justify-center border rounded-sm overflow-hidden",
-                    size === "sm" ? "h-5 w-5" : "h-8 w-8"
+                    size === "sm"
+                      ? "h-5 w-5 text-[0.6rem]"
+                      : "h-10 w-10 text-[1rem]"
                   )}
                   style={{
                     borderColor: `rgb(${TopicColors[data.colorIndex]})`,
@@ -49,7 +51,7 @@ const ClaimBoxes = ({
                   ></div>
                   <span
                     className={cn(
-                      "group-hover:text-white text-[0.6rem] relative z-20",
+                      "group-hover:text-white relative z-20",
                       isHighlighted ? "text-white" : ""
                     )}
                   >

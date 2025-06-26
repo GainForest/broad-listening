@@ -4,7 +4,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { TClaim, TSubtopic } from "./ClaimTopicItem";
+import { TClaim, TSubtopic } from "./TopicItem";
 import { TopicColors } from "./utils/parse-topics";
 import React from "react";
 import { MessageCircle } from "lucide-react";

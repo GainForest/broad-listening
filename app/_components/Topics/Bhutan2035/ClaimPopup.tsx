@@ -3,7 +3,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { TClaim } from "./ClaimTopicItem";
+import { TClaim } from "./TopicItem";
 import { TopicColors } from "./utils/parse-topics";
 import { blo } from "blo";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";

@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import ClaimBoxes from "./ClaimBoxes";
 import SubtopicPopup from "./SubtopicPopup";
 import { TopicColors } from "./utils/parse-topics";
-import { ClaimStatistics } from "./ClaimStatistics";
 
 export type TQuote = {
   id: string;
@@ -54,19 +53,16 @@ const calculateTotalPeople = (topic: TTopic) => {
 
 const TopicItem = ({
   data,
-  demographics,
-  toggleDemographics,
 }: {
   data: TTopic;
   demographics: TDemographics;
-  toggleDemographics: boolean;
+  mode: "topics" | "demographics";
 }) => {
-  
   const [highlightedSubtopicId, setHighlightedSubtopicId] = useState<
     string | null
   >(null);
 
-  const allAuthorIds = findAuthorIdsInTopic(data);
+  // const allAuthorIds = findAuthorIdsInTopic(data);
 
   const totalClaims = data.subtopics.reduce((acc, subtopic) => {
     return acc + subtopic.claims.length;
@@ -76,7 +72,7 @@ const TopicItem = ({
   return (
     <div className="p-3 flex flex-col md:flex-row gap-3">
       <div className="flex-1">
-        {toggleDemographics ? <ClaimStatistics demographics={demographics} data={data} /> : <ClaimBoxes data={data} highlightedSubtopicId={highlightedSubtopicId} />}
+        <ClaimBoxes data={data} highlightedSubtopicId={highlightedSubtopicId} />
       </div>
       <div className="flex-1">
         <h4 className="font-bold">{data.title}</h4>
@@ -128,16 +124,16 @@ const TopicItem = ({
 export default TopicItem;
 
 // Function to find all author IDs within a single topic and its subtopics
-const findAuthorIdsInTopic = (topic: TTopic) => {
-  const authorIds = new Set<string>();
+// const findAuthorIdsInTopic = (topic: TTopic) => {
+//   const authorIds = new Set<string>();
 
-  topic.subtopics.forEach((subtopic: TSubtopic) => {
-    subtopic.claims.forEach((claim: TClaim) => {
-      claim.quotes.forEach((quote: TQuote) => {
-        authorIds.add(quote.authorId);
-      });
-    });
-  });
+//   topic.subtopics.forEach((subtopic: TSubtopic) => {
+//     subtopic.claims.forEach((claim: TClaim) => {
+//       claim.quotes.forEach((quote: TQuote) => {
+//         authorIds.add(quote.authorId);
+//       });
+//     });
+//   });
 
-  return Array.from(authorIds);
-};
+//   return Array.from(authorIds);
+// };
