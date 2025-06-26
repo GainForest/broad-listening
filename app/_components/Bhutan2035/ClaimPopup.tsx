@@ -3,12 +3,13 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { TClaim, TDemographics } from "./TopicItem";
+import { TClaim } from "./TopicItem";
 import { TopicColors } from "./utils/parse-topics";
 import { blo } from "blo";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import React from "react";
 import { BsEmojiDizzy, BsEmojiNeutral, BsEmojiSmile } from "react-icons/bs";
+import { TDemographics } from "./utils/fetch-demographics";
 
 const ClaimPopup = ({
   trigger,
@@ -24,50 +25,14 @@ const ClaimPopup = ({
   colorIndex: number;
   subtopicTitle: string;
   demographics: TDemographics;
-  }) => {
-
+}) => {
   // Get the first quote's author information
   const firstQuote = data.quotes[0];
   const authorId = firstQuote?.authorId;
-  
-  // Find gender and age information from demographics
-  const genderData = demographics.gender as unknown as Record<string, string[]>;
-  const ageData = demographics.age as unknown as Record<string, string[]>;
-  
-  let authorGender = "";
-  let authorAgeGroup = "";
-  
-  if (authorId) {
-    // Find gender
-    for (const [gender, userIds] of Object.entries(genderData)) {
-      if (userIds.includes(authorId)) {
-        authorGender = gender;
-        break;
-      }
-    }
-    
-    // Find age group
-    for (const [ageGroup, userIds] of Object.entries(ageData)) {
-      if (userIds.includes(authorId)) {
-        authorAgeGroup = ageGroup;
-        break;
-      }
-    }
-  }
-  
-  // Format age group for display
-  const formatAgeGroup = (ageGroup: string) => {
-    switch (ageGroup) {
-      case "under_18": return "Under 18";
-      case "age_18_25": return "18-25";
-      case "age_25_35": return "25-35";
-      case "age_35_55": return "35-55";
-      case "over_55": return "Over 55";
-      default: return ageGroup;
-    }
-  };
 
-  
+  const authorGender = demographics[authorId]?.gender;
+  const authorAgeGroup = demographics[authorId]?.ageGroup;
+
   return (
     <Tooltip>
       <TooltipTrigger asChild={asChild}>{trigger}</TooltipTrigger>
@@ -133,10 +98,11 @@ const ClaimPopup = ({
               <div className="flex flex-col">
                 <span className="font-bold">{authorId?.substring(0, 8)}</span>
                 <span className="text-muted-foreground">
-                  {authorGender && authorAgeGroup 
-                    ? `${authorGender} • ${formatAgeGroup(authorAgeGroup)} years old`
-                    : "Unknown demographics"
-                  }
+                  {authorGender && authorAgeGroup
+                    ? `${authorGender
+                        .charAt(0)
+                        .toUpperCase()} • ${authorAgeGroup} years old`
+                    : "Unknown demographics"}
                 </span>
               </div>
             </div>

@@ -1,27 +1,40 @@
 "use client";
 
 import { useState } from "react";
-import TopicItem, { TDemographics, TTopic } from "./TopicItem";
+import TopicItem, { TTopic } from "./TopicItem";
 import { Book, MessageCircle, Users } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
+import { TDemographics } from "./utils/fetch-demographics";
 
 export const TopicsDisplay = ({
   topics,
+  totalUniqueClaims,
+  totalUniquePeople,
   demographics,
 }: {
   topics: TTopic[];
+  totalUniqueClaims: number;
+  totalUniquePeople: number;
   demographics: TDemographics;
 }) => {
   const [mode, setMode] = useState<"topics" | "demographics">("topics");
-  const [genderFilter, setGenderFilter] = useState<Set<"male" | "female">>(
-    new Set()
-  );
+  const [genderFilter, setGenderFilter] = useState<
+    Set<TDemographics[string]["gender"]>
+  >(new Set());
   const [ageFilter, setAgeFilter] = useState<
-    Set<"18-24" | "25-35" | "35-50" | "50+">
+    Set<TDemographics[string]["ageGroup"]>
   >(new Set());
 
-  const updateGenderFilter = (gender: "male" | "female") => {
+  const ageGroups = [
+    "<18",
+    "18-25",
+    "25-35",
+    "35-55",
+    "55+",
+  ] satisfies TDemographics[string]["ageGroup"][];
+
+  const updateGenderFilter = (gender: TDemographics[string]["gender"]) => {
     if (genderFilter.has(gender)) {
       setGenderFilter((prev) => {
         prev.delete(gender);
@@ -35,7 +48,7 @@ export const TopicsDisplay = ({
     }
   };
 
-  const updateAgeFilter = (age: "18-24" | "25-35" | "35-50" | "50+") => {
+  const updateAgeFilter = (age: TDemographics[string]["ageGroup"]) => {
     if (ageFilter.has(age)) {
       setAgeFilter((prev) => {
         prev.delete(age);
@@ -61,12 +74,12 @@ export const TopicsDisplay = ({
           <div className="h-4 w-0.5 bg-muted"></div>
           <span className="flex items-center gap-1">
             <MessageCircle className="size-4" />
-            {topics.at(-1)?.totalClaims} claims
+            {totalUniqueClaims} claims
           </span>
           <div className="h-4 w-0.5 bg-muted"></div>
           <span className="flex items-center gap-1">
             <Users className="size-4" />
-            {topics.at(-1)?.totalPeople} People
+            {totalUniquePeople} People
           </span>
         </div>
         <span className="flex items-center gap-1">
@@ -96,7 +109,12 @@ export const TopicsDisplay = ({
                 )}
                 onClick={() => updateGenderFilter("male")}
               >
-                Male ({demographics.gender.Male?.length || 0})
+                Male (
+                {
+                  Object.values(demographics).filter((d) => d.gender === "male")
+                    .length
+                }
+                )
               </button>
               <button
                 className={cn(
@@ -106,53 +124,40 @@ export const TopicsDisplay = ({
                 )}
                 onClick={() => updateGenderFilter("female")}
               >
-                Female ({demographics.gender.Female?.length || 0})
+                Female (
+                {
+                  Object.values(demographics).filter(
+                    (d) => d.gender === "female"
+                  ).length
+                }
+                )
               </button>
             </div>
           </div>
           <div className="flex flex-col items-end">
             <span className="text-sm text-muted-foreground">Filter by age</span>
             <div className="border border-border rounded-md flex items-center overflow-hidden">
-              <button
-                className={cn(
-                  "transition-all text-xs px-2 py-1 hover:bg-primary/10",
-                  ageFilter.has("18-24") &&
-                    "bg-primary/20 hover:bg-primary/30 text-primary"
-                )}
-                onClick={() => updateAgeFilter("18-24")}
-              >
-                18-24 ({demographics.age.age_18_25?.length || 0})
-              </button>
-              <button
-                className={cn(
-                  "transition-all text-xs px-2 py-1 hover:bg-primary/10",
-                  ageFilter.has("25-35") &&
-                    "bg-primary/20 hover:bg-primary/30 text-primary"
-                )}
-                onClick={() => updateAgeFilter("25-35")}
-              >
-                25-35 ({demographics.age.age_25_35?.length || 0})
-              </button>
-              <button
-                className={cn(
-                  "transition-all text-xs px-2 py-1 hover:bg-primary/10",
-                  ageFilter.has("35-50") &&
-                    "bg-primary/20 hover:bg-primary/30 text-primary"
-                )}
-                onClick={() => updateAgeFilter("35-50")}
-              >
-                35-50 ({demographics.age.age_35_55?.length || 0})
-              </button>
-              <button
-                className={cn(
-                  "transition-all text-xs px-2 py-1 hover:bg-primary/10",
-                  ageFilter.has("50+") &&
-                    "bg-primary/20 hover:bg-primary/30 text-primary"
-                )}
-                onClick={() => updateAgeFilter("50+")}
-              >
-                50+ ({demographics.age.over_55?.length || 0})
-              </button>
+              {ageGroups.map((age) => {
+                return (
+                  <button
+                    key={age}
+                    className={cn(
+                      "transition-all text-xs px-2 py-1 hover:bg-primary/10",
+                      ageFilter.has(age) &&
+                        "bg-primary/20 hover:bg-primary/30 text-primary"
+                    )}
+                    onClick={() => updateAgeFilter(age)}
+                  >
+                    {age} (
+                    {
+                      Object.values(demographics).filter(
+                        (d) => d.ageGroup === age
+                      ).length
+                    }
+                    )
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -165,10 +170,14 @@ export const TopicsDisplay = ({
                 key={topic.title}
                 data={topic}
                 demographics={demographics}
-                filter={mode === "demographics" ? {
-                  gender: Array.from(genderFilter),
-                  age: Array.from(ageFilter)
-                } : undefined}
+                filter={
+                  mode === "demographics"
+                    ? {
+                        gender: Array.from(genderFilter),
+                        age: Array.from(ageFilter),
+                      }
+                    : undefined
+                }
               />
             );
           })}

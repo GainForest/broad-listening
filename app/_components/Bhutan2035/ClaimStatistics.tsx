@@ -1,6 +1,7 @@
-import { TDemographics, TTopic } from "./TopicItem";
+import { TTopic } from "./TopicItem";
 import { GenderBarChart } from "./GenderBarChart";
 import { AgeBarChart } from "./AgeBarChart";
+import { TDemographics } from "./utils/fetch-demographics";
 
 const calculateAllTheFemalesAndMales = (
   demographics: TDemographics,

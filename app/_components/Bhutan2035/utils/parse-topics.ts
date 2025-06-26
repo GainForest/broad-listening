@@ -20,7 +20,13 @@ export const TopicColors = [
   [190, 18, 60], // rose-700
 ];
 
-const parseTopics = (data: any): TTopic[] => {
+const parseTopics = (
+  data: any
+): {
+  topics: TTopic[];
+  totalUniqueClaims: number;
+  totalUniquePeople: number;
+} => {
   const claimIdToIndexMappings: Map<string, number> = new Map();
   const userIdToIndexMappings: Map<string, number> = new Map();
   const topics = data.data[1].topics;
@@ -64,13 +70,14 @@ const parseTopics = (data: any): TTopic[] => {
           }),
         };
       }),
-      totalPeople: userIdToIndexMappings.size,
-      totalClaims: claimIdToIndexMappings.size,
     };
   });
 
-  console.log("======", result);
-  return result;
+  return {
+    topics: result,
+    totalUniqueClaims: claimIdToIndexMappings.size,
+    totalUniquePeople: userIdToIndexMappings.size,
+  };
 };
 
 export default parseTopics;

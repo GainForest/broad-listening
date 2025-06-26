@@ -1,21 +1,11 @@
-import ClaimBoxes from "@/app/_components/Topics/Bhutan2035/ClaimBoxes";
-import parseTopics from "@/app/_components/Topics/Bhutan2035/utils/parse-topics";
+import parseTopics from "@/app/_components/Bhutan2035/utils/parse-topics";
 import Container from "@/components/ui/container";
 import { MessageCircle, Quote, User2 } from "lucide-react";
 import { redirect } from "next/navigation";
 import React from "react";
 import { PiTreeStructure } from "react-icons/pi";
-
-const getBaseUrl = () => {
-  if (typeof window !== "undefined") {
-    // Client-side: use the current origin
-    return window.location.origin;
-  }
-  // Server-side: use environment variable or default to localhost:3000
-  return process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-};
-
-const baseUrl = getBaseUrl();
+import SubTopic from "./SubTopic";
+import fetchDemographics from "@/app/_components/Bhutan2035/utils/fetch-demographics";
 
 const TopicPage = async ({
   params,
@@ -31,21 +21,14 @@ const TopicPage = async ({
     });
   });
 
-  const [paramsData, parsedTopics, genderData, ageData] = await Promise.all([
+  const [paramsData, parsedTopics, demographics] = await Promise.all([
     params,
     parsedTopicsPromise,
-    fetch(`${baseUrl}/api/profile/gender-groups`),
-    fetch(`${baseUrl}/api/profile/age-groups`),
+    fetchDemographics(),
   ]);
-  const topic = parsedTopics.find((topic) => topic.id === paramsData.topicId);
-
-  const genderJson = await genderData.json();
-  const ageJson = await ageData.json();
-
-  const demographics = {
-    gender: genderJson,
-    age: ageJson,
-  };
+  const topic = parsedTopics.topics.find(
+    (topic) => topic.id === paramsData.topicId
+  );
 
   if (!topic) redirect("/not-found");
 
@@ -78,27 +61,12 @@ const TopicPage = async ({
       <div className="mt-4">
         <div className="flex flex-col gap-4">
           {topic.subtopics.map((subtopic) => (
-            <div key={subtopic.id}>
-              <h3 className="text-xl font-bold">{subtopic.title}</h3>
-              <p>{subtopic.description}</p>
-
-              <div className="mt-2">
-                <ClaimBoxes
-                  data={{
-                    title: topic.title,
-                    id: topic.id,
-                    description: topic.description,
-                    subtopics: [subtopic],
-                    colorIndex: topic.colorIndex,
-                    totalPeople: topic.totalPeople,
-                    totalClaims: topic.totalClaims,
-                  }}
-                  highlightedSubtopicId={null}
-                  size="lg"
-                  demographics={demographics}
-                />
-              </div>
-            </div>
+            <SubTopic
+              key={subtopic.id}
+              subtopic={subtopic}
+              topic={topic}
+              demographics={demographics}
+            />
           ))}
         </div>
       </div>
