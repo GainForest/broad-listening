@@ -19,7 +19,7 @@ export const GenderBarChart = ({ male, female, className = "" }: GenderBarChartP
       <div className="w-full h-6 bg-gray-200 rounded-full overflow-hidden flex">
         {/* Male bar */}
         <div 
-          className="bg-blue-500 h-full flex items-center justify-center transition-all duration-300"
+          className="bg-blue-500/50 h-full flex items-center justify-center transition-all duration-300"
           style={{ width: `${malePercentage}%` }}
         >
           {malePercentage > 10 && (
@@ -31,7 +31,7 @@ export const GenderBarChart = ({ male, female, className = "" }: GenderBarChartP
         
         {/* Female bar */}
         <div 
-          className="bg-pink-500 h-full flex items-center justify-center transition-all duration-300"
+          className="bg-pink-500/50 h-full flex items-center justify-center transition-all duration-300"
           style={{ width: `${femalePercentage}%` }}
         >
           {femalePercentage > 10 && (
