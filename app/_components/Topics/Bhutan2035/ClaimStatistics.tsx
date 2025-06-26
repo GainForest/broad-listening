@@ -1,5 +1,6 @@
 import { Mars, Venus } from "lucide-react"
 import { TDemographics, TTopic } from "./ClaimTopicItem"
+import { GenderBarChart } from "./GenderBarChart"
 
 
 const calculateAllTheFemalesAndMales = (demographics: TDemographics, topic: TTopic) => {
@@ -31,15 +32,8 @@ export const ClaimStatistics = ({demographics, data}: {demographics: TDemographi
     const { male, female } = calculateAllTheFemalesAndMales(demographics, data);
     
     return (
-        <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1">
-                <Mars className="size-4 text-blue-500" />
-                <span className="text-sm">{male}</span>
-            </div>
-            <div className="flex items-center gap-1">
-                <Venus className="size-4 text-pink-500" />
-                <span className="text-sm">{female}</span>
-            </div>
+        <div className="space-y-3">            
+            <GenderBarChart male={male} female={female} />
         </div>
     )
 }
