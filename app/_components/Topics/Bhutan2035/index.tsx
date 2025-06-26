@@ -30,7 +30,7 @@ const getBaseUrl = () => {
 
 const Bhutan2035 = async () => {
   const data = await fetch(
-    "https://storage.googleapis.com/tttc-light-dev/f6d673c83bf46557b0a1e3401f109bb10fad76d354a4eb0af0264daf90c93ce1"
+    "https://storage.googleapis.com/tttc-light-dev/f74c1daedd3e92cf335a0d614f88e0d929ebcd8289b6b8ca69b88b1711a58b2e"
   );
   const json = await data.json();
   const topics = parseTopics(json);
