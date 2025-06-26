@@ -83,17 +83,6 @@ const Bhutan2035 = async () => {
         </span>
       </div>
       <DisplayTopicsOrDemographics topics={topics} demographics={demographics}/>
-      <div className="flex flex-col border border-border rounded-xl divide-y mt-3">
-        {topics.map((topic) => {
-          return (
-            <TopicItem
-              key={topic.title}
-              data={topic}
-              demographics={demographics}
-            />
-          );
-        })}
-      </div>
     </div>
   );
 };
