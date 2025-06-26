@@ -8,17 +8,20 @@ import { TopicColors } from "./utils/parse-topics";
 import { blo } from "blo";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import React from "react";
+import { BsEmojiDizzy, BsEmojiNeutral, BsEmojiSmile } from "react-icons/bs";
 
 const ClaimPopup = ({
   trigger,
   asChild,
   data,
   colorIndex,
+  subtopicTitle,
 }: {
   trigger: React.ReactNode;
   asChild?: boolean;
   data: TClaim;
   colorIndex: number;
+  subtopicTitle: string;
 }) => {
   return (
     <Tooltip>
@@ -26,30 +29,32 @@ const ClaimPopup = ({
       <TooltipContent>
         <div className="w-[80vw] sm:w-[300px] flex flex-col gap-4 text-wrap">
           <div className="flex flex-col gap-0.5">
-            <span className="text-xs text-muted-foreground font-bold">
-              Claim #{data.index}
-            </span>
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold">{subtopicTitle}</span>
+              <span className="text-xs text-right text-muted-foreground font-bold">
+                Claim #{data.index}
+              </span>
+            </div>
             <span
-              className="text-sm text-wrap"
+              className="text-base font-semibold mt-1 text-wrap"
               style={{
                 color: `rgb(${TopicColors[colorIndex]})`,
               }}
             >
               {data.content}
             </span>
-            <div className="p-2 rounded-lg bg-muted/50 mt-1">
-              <b>Do you agree with this claim?</b>
-              <div className="flex items-center w-full rounded-md overflow-hidden mt-1">
-                <button className="flex-1 bg-red-500/10 text-red-700 py-1">
-                  No
-                </button>
-                <button className="flex-1 bg-yellow-500/10 text-yellow-700 py-1">
-                  Maybe
-                </button>
-                <button className="flex-1 bg-green-500/10 text-green-700 py-1">
-                  Yes
-                </button>
-              </div>
+            <div className="flex items-center gap-1 mt-1">
+              <button className="flex flex-col items-center flex-1 bg-red-500/10 text-red-700 py-1 rounded-md gap-0.5 hover:bg-red-500/20">
+                <BsEmojiDizzy className="size-4 opacity-70" />
+                Don&apos;t agree
+              </button>
+              <button className="flex flex-col items-center flex-1 bg-yellow-500/10 text-yellow-700 py-1 rounded-md gap-0.5 hover:bg-yellow-500/20">
+                <BsEmojiNeutral className="size-4 opacity-70" />
+                Not sure
+              </button>
+              <button className="flex flex-col items-center flex-1 bg-green-500/10 text-green-700 py-1 rounded-md gap-0.5 hover:bg-green-500/20">
+                <BsEmojiSmile className="size-4 opacity-70" />I agree
+              </button>
             </div>
           </div>
           <hr />

@@ -31,7 +31,7 @@ const findAuthorIdsInTopics = (topics: TTopic[]) => {
 
 const Bhutan2035 = async () => {
   const data = await fetch(
-    "https://storage.googleapis.com/tttc-light-dev/7b8e53b8761a649f18f4343d0b13c34093c01957c91c72ed90f7052a04cc0b9b"
+    "https://storage.googleapis.com/tttc-light-dev/f6d673c83bf46557b0a1e3401f109bb10fad76d354a4eb0af0264daf90c93ce1"
   );
   const json = await data.json();
   const topics = parseTopics(json);

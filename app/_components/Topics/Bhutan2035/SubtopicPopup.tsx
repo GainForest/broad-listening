@@ -4,11 +4,20 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { TClaim } from "./ClaimTopicItem";
+import { TClaim, TSubtopic } from "./ClaimTopicItem";
 import { TopicColors } from "./utils/parse-topics";
-import { blo } from "blo";
-import { Quote } from "lucide-react";
 import React from "react";
+import { MessageCircle } from "lucide-react";
+
+const countPeopleInClaims = (claims: TClaim[]) => {
+  const people = new Set<string>();
+  claims.forEach((claim) => {
+    claim.quotes.forEach((quote) => {
+      people.add(quote.authorId);
+    });
+  });
+  return people.size;
+};
 
 const SubtopicPopup = ({
   trigger,
@@ -20,7 +29,7 @@ const SubtopicPopup = ({
 }: {
   trigger: React.ReactNode;
   asChild?: boolean;
-  data: TClaim;
+  data: TSubtopic;
   colorIndex: number;
   onHoverStart: () => void;
   onHoverEnd: () => void;
@@ -50,58 +59,21 @@ const SubtopicPopup = ({
       >
         <div className="w-[80vw] sm:w-[300px] flex flex-col gap-4 text-wrap">
           <div className="flex flex-col gap-0.5">
-            <span className="text-xs text-muted-foreground font-bold">
-              Claim #{data.index}
-            </span>
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold">{data.title}</span>
+            </div>
             <span
-              className="text-sm text-wrap"
+              className="text-base font-semibold mt-1 text-wrap"
               style={{
                 color: `rgb(${TopicColors[colorIndex]})`,
               }}
             >
-              {data.content}
+              {data.description}
             </span>
-            <div className="p-2 rounded-lg bg-muted/50 mt-1">
-              <b>Do you agree with this claim?</b>
-              <div className="flex items-center w-full rounded-md overflow-hidden mt-1">
-                <button className="flex-1 bg-red-500/10 text-red-700 py-1">
-                  No
-                </button>
-                <button className="flex-1 bg-yellow-500/10 text-yellow-700 py-1">
-                  Maybe
-                </button>
-                <button className="flex-1 bg-green-500/10 text-green-700 py-1">
-                  Yes
-                </button>
-              </div>
-            </div>
-          </div>
-          <hr />
-          <div>
-            <div className="flex items-center gap-1 text-muted-foreground">
-              <Quote className="size-4" />
-              <span>Quotes</span>
-            </div>
-            <div className="mt-2">
-              {data.quotes.map((quote) => (
-                <div key={quote.id}>
-                  <q className="text-sm italic">{quote.text}</q>
-                  <span className="text-muted-foreground">
-                    - {quote.authorIndex}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-          {/* <hr /> */}
-          <div className="flex items-center gap-2 mb-0.5">
-            <div className="h-8 w-8 rounded-full border border-border overflow-hidden">
-              <img src={blo("0x123")} />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold">{}</span>
-              <span className="text-muted-foreground">Male • 13yo</span>
-            </div>
+            <span className="text-sm text-muted-foreground flex items-center gap-1">
+              <MessageCircle className="size-4" /> {data.claims.length} claims
+              by {countPeopleInClaims(data.claims)} people
+            </span>
           </div>
         </div>{" "}
       </TooltipContent>

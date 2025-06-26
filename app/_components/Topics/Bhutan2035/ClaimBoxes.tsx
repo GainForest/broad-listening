@@ -7,9 +7,11 @@ import { cn } from "@/lib/utils";
 const ClaimBoxes = ({
   data,
   highlightedSubtopicId,
+  size = "sm",
 }: {
   data: TTopic;
   highlightedSubtopicId: string | null;
+  size?: "sm" | "lg";
 }) => {
   let claimNumber = 0;
   return (
@@ -27,7 +29,10 @@ const ClaimBoxes = ({
               asChild
               trigger={
                 <button
-                  className="relative group h-5 w-5 flex items-center justify-center border rounded-sm overflow-hidden"
+                  className={cn(
+                    "relative group flex items-center justify-center border rounded-sm overflow-hidden",
+                    size === "sm" ? "h-5 w-5" : "h-8 w-8"
+                  )}
                   style={{
                     borderColor: `rgb(${TopicColors[data.colorIndex]})`,
                     color: `rgb(${TopicColors[data.colorIndex]})`,
@@ -52,6 +57,7 @@ const ClaimBoxes = ({
                   </span>
                 </button>
               }
+              subtopicTitle={subtopic.title}
             />
           );
         });

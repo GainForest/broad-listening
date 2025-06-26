@@ -89,7 +89,7 @@ const TopicItem = ({
           return (
             <SubtopicPopup
               key={index}
-              data={subtopic.claims[0]}
+              data={subtopic}
               colorIndex={data.colorIndex}
               asChild
               onHoverStart={() => setHighlightedSubtopicId(subtopic.id)}
@@ -101,7 +101,7 @@ const TopicItem = ({
                   style={{
                     color: `rgb(${TopicColors[data.colorIndex]})`,
                   }}
-                  href="#"
+                  href={`/dashboard/${data.id}#${subtopic.id}`}
                 >
                   {subtopic.title}
                   {index < data.subtopics.length - 1 && ","}
@@ -113,7 +113,7 @@ const TopicItem = ({
         {data.subtopics.length > 4 && (
           <a
             className="rounded-full flex items-center gap-1 text-primary text-sm underline"
-            href="#"
+            href={`/dashboard/${data.id}`}
           >
             View all subtopics
           </a>
