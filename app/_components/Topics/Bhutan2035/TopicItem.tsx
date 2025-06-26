@@ -55,10 +55,10 @@ const calculateTotalPeople = (topic: TTopic) => {
 
 const TopicItem = ({
   data,
+  demographics,
 }: {
   data: TTopic;
   demographics: TDemographics;
-  mode: "topics" | "demographics";
 }) => {
   const [highlightedSubtopicId, setHighlightedSubtopicId] = useState<
     string | null
@@ -74,7 +74,7 @@ const TopicItem = ({
   return (
     <div className="p-3 flex flex-col md:flex-row gap-3">
       <div className="flex-1">
-        <ClaimBoxes data={data} highlightedSubtopicId={highlightedSubtopicId} />
+        <ClaimBoxes data={data} highlightedSubtopicId={highlightedSubtopicId} demographics={demographics}/>
       </div>
       <div className="flex-1">
         <h4 className="font-bold">{data.title}</h4>

@@ -1,5 +1,5 @@
 import React from "react";
-import { TTopic } from "./TopicItem";
+import { TDemographics, TTopic } from "./TopicItem";
 import { TopicColors } from "./utils/parse-topics";
 import ClaimPopup from "./ClaimPopup";
 import { cn } from "@/lib/utils";
@@ -8,10 +8,12 @@ const ClaimBoxes = ({
   data,
   highlightedSubtopicId,
   size = "sm",
+  demographics,
 }: {
   data: TTopic;
   highlightedSubtopicId: string | null;
   size?: "sm" | "lg";
+  demographics: TDemographics;
 }) => {
   let claimNumber = 0;
   return (
@@ -23,6 +25,7 @@ const ClaimBoxes = ({
           const isHighlighted = highlightedSubtopicId === subtopic.id;
           return (
             <ClaimPopup
+              demographics={demographics}
               key={claim.id}
               data={claim}
               colorIndex={data.colorIndex}

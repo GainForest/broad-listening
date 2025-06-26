@@ -3,7 +3,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { TClaim } from "./TopicItem";
+import { TClaim, TDemographics } from "./TopicItem";
 import { TopicColors } from "./utils/parse-topics";
 import { blo } from "blo";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
@@ -16,13 +16,58 @@ const ClaimPopup = ({
   data,
   colorIndex,
   subtopicTitle,
+  demographics,
 }: {
   trigger: React.ReactNode;
   asChild?: boolean;
   data: TClaim;
   colorIndex: number;
   subtopicTitle: string;
-}) => {
+  demographics: TDemographics;
+  }) => {
+
+  // Get the first quote's author information
+  const firstQuote = data.quotes[0];
+  const authorId = firstQuote?.authorId;
+  
+  // Find gender and age information from demographics
+  const genderData = demographics.gender as unknown as Record<string, string[]>;
+  const ageData = demographics.age as unknown as Record<string, string[]>;
+  
+  let authorGender = "";
+  let authorAgeGroup = "";
+  
+  if (authorId) {
+    // Find gender
+    for (const [gender, userIds] of Object.entries(genderData)) {
+      if (userIds.includes(authorId)) {
+        authorGender = gender;
+        break;
+      }
+    }
+    
+    // Find age group
+    for (const [ageGroup, userIds] of Object.entries(ageData)) {
+      if (userIds.includes(authorId)) {
+        authorAgeGroup = ageGroup;
+        break;
+      }
+    }
+  }
+  
+  // Format age group for display
+  const formatAgeGroup = (ageGroup: string) => {
+    switch (ageGroup) {
+      case "under_18": return "Under 18";
+      case "age_18_25": return "18-25";
+      case "age_25_35": return "25-35";
+      case "age_35_55": return "35-55";
+      case "over_55": return "Over 55";
+      default: return ageGroup;
+    }
+  };
+
+  
   return (
     <Tooltip>
       <TooltipTrigger asChild={asChild}>{trigger}</TooltipTrigger>
@@ -83,11 +128,16 @@ const ClaimPopup = ({
             </div>
             <div className="flex items-center gap-2 mb-0.5 mt-1">
               <div className="h-5 w-5 rounded-full border border-border overflow-hidden">
-                <img src={blo("0x123")} />
+                <img src={blo(`0x${authorId}`)} />
               </div>
               <div className="flex flex-col">
-                <span className="font-bold">{}</span>
-                <span className="text-muted-foreground">Male • 13yo</span>
+                <span className="font-bold">{authorId}</span>
+                <span className="text-muted-foreground">
+                  {authorGender && authorAgeGroup 
+                    ? `${authorGender} • ${formatAgeGroup(authorAgeGroup)} years old`
+                    : "Unknown demographics"
+                  }
+                </span>
               </div>
             </div>
           </div>
