@@ -11,9 +11,8 @@ const getBaseUrl = () => {
     // Client-side: use the current origin
     return window.location.origin;
   }
-  // Server-side: use environment variable or default to localhost:3000
-  console.log(process.env.NEXT_PUBLIC_BASE_URL, "NEXT_PUBLIC_BASE_URL")
-  return process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  // Server-side: use environment variable or default to localhost:300
+  return process.env.NEXT_PUBLIC_VERCEL_URL || "http://localhost:3000";
 };
 
 const fetchDemographics = async () => {
