@@ -8,8 +8,8 @@ import { TopicColors } from "./utils/parse-topics";
 import { blo } from "blo";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import React from "react";
-import { BsEmojiDizzy, BsEmojiNeutral, BsEmojiSmile } from "react-icons/bs";
 import { TDemographics } from "./utils/fetch-demographics";
+import VotingSection from "./VotingSection";
 
 const ClaimPopup = ({
   trigger,
@@ -53,19 +53,7 @@ const ClaimPopup = ({
             >
               {data.content}
             </span>
-            <div className="flex items-center gap-1 mt-1">
-              <button className="flex flex-col items-center flex-1 bg-red-500/10 text-red-700 py-1 rounded-md gap-0.5 hover:bg-red-500/20">
-                <BsEmojiDizzy className="size-4 opacity-70" />
-                Don&apos;t agree
-              </button>
-              <button className="flex flex-col items-center flex-1 bg-yellow-500/10 text-yellow-700 py-1 rounded-md gap-0.5 hover:bg-yellow-500/20">
-                <BsEmojiNeutral className="size-4 opacity-70" />
-                Not sure
-              </button>
-              <button className="flex flex-col items-center flex-1 bg-green-500/10 text-green-700 py-1 rounded-md gap-0.5 hover:bg-green-500/20">
-                <BsEmojiSmile className="size-4 opacity-70" />I agree
-              </button>
-            </div>
+            <VotingSection claimId={data.id} />
           </div>
           <hr />
           <div>
