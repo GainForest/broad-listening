@@ -84,14 +84,20 @@ export const TopicsDisplay = ({
         </div>
         <span className="flex items-center gap-1">
           <Switch
+            id="filters"
+            className="cursor-pointer"
             checked={mode === "demographics"}
             onCheckedChange={() =>
               setMode(mode === "demographics" ? "topics" : "demographics")
             }
           />
-          <span className="font-bold text-sm text-muted-foreground">
+
+          <label
+            htmlFor="filters"
+            className="font-bold cursor-pointer text-sm text-muted-foreground"
+          >
             Filters
-          </span>
+          </label>
         </span>
       </div>
       {mode === "demographics" && (
