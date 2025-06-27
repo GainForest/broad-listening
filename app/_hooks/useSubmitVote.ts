@@ -36,15 +36,21 @@ const useSubmitVote = () => {
         process.env.NEXT_PUBLIC_CLAIM_AND_USER_VOTE_COLLECTION_ID;
       const claimVotesCollectionId =
         process.env.NEXT_PUBLIC_CLAIM_VOTES_COLLECTION_ID;
+      const interactionsCollectionId =
+        process.env.NEXT_PUBLIC_INTERACTIONS_COLLECTION_ID;
 
-      if (!userVoteCollectionId || !claimVotesCollectionId) {
+      if (
+        !userVoteCollectionId ||
+        !claimVotesCollectionId ||
+        !interactionsCollectionId
+      ) {
         throw new Error("Collection IDs not configured");
       }
 
       const documentId = createDocumentId(claimId, userId);
 
       // Calculate vote change for updating the total votes count
-      let voteChange = 0;
+      let voteChange: number | null = null;
 
       // If clicking the same vote, delete the document (remove vote)
       if (currentVote === vote) {
@@ -98,41 +104,69 @@ const useSubmitVote = () => {
         }
       }
 
+      if (voteChange === null) {
+        return;
+      }
+
       // Update the total votes count for the claim
-      if (voteChange !== 0) {
-        try {
-          // Get current votes count
-          const currentVotesDoc = await databases.getDocument(
-            process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || "",
-            claimVotesCollectionId,
-            claimId
-          );
 
-          const currentVotes = currentVotesDoc.votes || 0;
-          const newVotes = currentVotes + voteChange;
+      try {
+        // Get current votes count
+        const currentVotesDoc = await databases.getDocument(
+          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || "",
+          claimVotesCollectionId,
+          claimId
+        );
 
-          // Update the votes count
-          await databases.updateDocument(
+        const currentVotes = currentVotesDoc.votes ?? 0;
+        const newVotes = currentVotes + voteChange;
+
+        // Update the votes count
+        await databases.updateDocument(
+          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || "",
+          claimVotesCollectionId,
+          claimId,
+          { votes: newVotes }
+        );
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (err: any) {
+        // If claim votes document doesn't exist, create it
+        if (err.code === 404) {
+          await databases.createDocument(
             process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || "",
             claimVotesCollectionId,
             claimId,
-            { votes: newVotes }
+            { votes: voteChange }
           );
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (err: any) {
-          // If claim votes document doesn't exist, create it
-          if (err.code === 404) {
-            await databases.createDocument(
-              process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || "",
-              claimVotesCollectionId,
-              claimId,
-              { votes: voteChange }
-            );
-          } else {
-            console.error("Error updating votes count:", err);
-            // Don't throw here, as the user vote was successful
-          }
+        } else {
+          console.error("Error updating votes count:", err);
+          // Don't throw here, as the user vote was successful
         }
+      }
+
+      // Update interactions collection counts
+      try {
+        // Determine which interaction type to update based on vote change
+        const documentId =
+          vote === 1 ? "agreements" : vote === 0 ? "maybes" : "disagreements";
+        const doc = await databases.getDocument(
+          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || "",
+          interactionsCollectionId,
+          documentId
+        );
+        const count = doc.count ?? 0;
+        const deviation = vote === currentVote ? -1 : 1;
+        const newCount = count + deviation;
+        databases.updateDocument(
+          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || "",
+          interactionsCollectionId,
+          documentId,
+          { count: newCount }
+        );
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (err: any) {
+        console.error("Error updating interactions count:", err);
+        // Don't throw here, as the user vote was successful
       }
 
       onSuccess?.();
