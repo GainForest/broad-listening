@@ -73,7 +73,6 @@ const Bhutan2035 = async () => {
           the Bhutan NDI hackathon in 2025.
         </p>
       </div>
-      {JSON.stringify(demographics)}
       <TopicsDisplay
         topics={topics}
         demographics={demographics}
