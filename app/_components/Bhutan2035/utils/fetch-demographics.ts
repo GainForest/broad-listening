@@ -24,8 +24,11 @@ const fetchDemographics = async () => {
     fetch(`${baseUrl}/api/profile/age-groups`),
   ]);
 
+
   const genderJson = await genderData.json();
   const ageJson = await ageData.json();
+
+  console.log(baseUrl, genderData, ageData, "genderData, ageData")
 
   const demographics: TDemographics = {};
 
