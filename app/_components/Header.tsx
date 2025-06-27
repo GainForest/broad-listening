@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/container";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,7 +20,7 @@ const Header = ({ cta }: { cta?: React.ReactNode }) => {
         </div>
         <span className="text-lg font-bold font-pixel">BroadListening</span>
       </Link>
-      {cta ?? <Button>Sign in</Button>}
+      {cta}
     </Container>
   );
 };
