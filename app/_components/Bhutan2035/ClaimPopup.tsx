@@ -11,7 +11,37 @@ import React from "react";
 import { BsEmojiDizzy, BsEmojiNeutral, BsEmojiSmile } from "react-icons/bs";
 import { TDemographics } from "./utils/fetch-demographics";
 import { useVotes } from "@/app/hooks/useVotes";
+import { cn } from "@/lib/utils";
 
+function VoteButton({
+  vote,
+  loading,
+  count,
+  color,
+  icon: Icon,
+  children,
+}: {
+  vote: () => void;
+  loading: boolean;
+  color: string;
+  count: number;
+  icon: React.ElementType;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      onClick={vote}
+      className={cn(
+        "flex cursor-pointer flex-col items-center flex-1 bg-green-500/10 text-green-700 py-1 rounded-md gap-0.5 hover:bg-green-500/20",
+        loading && "opacity-50",
+        color
+      )}
+    >
+      <Icon className="size-4 opacity-70" />
+      {children}
+    </button>
+  );
+}
 const ClaimPopup = ({
   trigger,
   asChild,
@@ -56,26 +86,35 @@ const ClaimPopup = ({
               {data.content}
             </span>
             <div className="flex items-center gap-1 mt-1">
-              <button
-                onClick={() => vote(-1)}
-                className="flex flex-col items-center flex-1 bg-red-500/10 text-red-700 py-1 rounded-md gap-0.5 hover:bg-red-500/20"
+              <VoteButton
+                color={"bg-red-500/10 text-red-700  hover:bg-red-500/20"}
+                vote={() => vote(-1)}
+                loading={loading}
+                count={count}
+                icon={BsEmojiDizzy}
               >
-                <BsEmojiDizzy className="size-4 opacity-70" />
                 Don&apos;t agree
-              </button>
-              <button
-                onClick={() => vote(0)}
-                className="flex flex-col items-center flex-1 bg-yellow-500/10 text-yellow-700 py-1 rounded-md gap-0.5 hover:bg-yellow-500/20"
+              </VoteButton>
+              <VoteButton
+                color={
+                  "bg-yellow-500/10 text-yellow-700  hover:bg-yellow-500/20"
+                }
+                vote={() => vote(0)}
+                loading={loading}
+                count={count}
+                icon={BsEmojiNeutral}
               >
-                <BsEmojiNeutral className="size-4 opacity-70" />
                 Not sure
-              </button>
-              <button
-                onClick={() => vote(1)}
-                className="flex flex-col items-center flex-1 bg-green-500/10 text-green-700 py-1 rounded-md gap-0.5 hover:bg-green-500/20"
+              </VoteButton>
+              <VoteButton
+                color={"bg-green-500/10 text-green-700  hover:bg-green-500/20"}
+                vote={() => vote(1)}
+                loading={loading}
+                count={count}
+                icon={BsEmojiSmile}
               >
-                <BsEmojiSmile className="size-4 opacity-70" />I agree
-              </button>
+                I agree
+              </VoteButton>
             </div>
           </div>
           <hr />
