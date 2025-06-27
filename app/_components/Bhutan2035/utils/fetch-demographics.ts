@@ -7,12 +7,7 @@ export type TDemographics = Record<
 >;
 
 const getBaseUrl = () => {
-  if (typeof window !== "undefined") {
-    // Client-side: use the current origin
-    return window.location.origin;
-  }
-  // Server-side: use environment variable or default to localhost:300
-  return process.env.NEXT_PUBLIC_VERCEL_URL || "http://localhost:3000";
+  return "https://bhutan.deepgov.org"
 };
 
 const fetchDemographics = async () => {
