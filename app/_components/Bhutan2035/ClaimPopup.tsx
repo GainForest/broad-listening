@@ -7,33 +7,35 @@ import { TClaim } from "./TopicItem";
 import { TopicColors } from "./utils/parse-topics";
 import { blo } from "blo";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { BsEmojiDizzy, BsEmojiNeutral, BsEmojiSmile } from "react-icons/bs";
 import { TDemographics } from "./utils/fetch-demographics";
 import { useVotes } from "@/app/hooks/useVotes";
 import { cn } from "@/lib/utils";
 
 function VoteButton({
-  vote,
-  loading,
-  count,
+  claimId,
   color,
+  value,
   icon: Icon,
   children,
 }: {
-  vote: () => void;
-  loading: boolean;
+  claimId: string;
+  value: number;
   color: string;
-  count: number;
   icon: React.ElementType;
   children: React.ReactNode;
 }) {
+  const { vote, loading, count } = useVotes(claimId);
+
+  console.log({ count });
   return (
     <button
-      onClick={vote}
+      onClick={() => vote(value)}
       className={cn(
-        "flex cursor-pointer flex-col items-center flex-1 bg-green-500/10 text-green-700 py-1 rounded-md gap-0.5 hover:bg-green-500/20",
+        "flex cursor-pointer flex-col opacity-70 items-center flex-1 bg-green-500/10 text-green-700 py-1 rounded-md gap-0.5 hover:bg-green-500/20",
         loading && "opacity-50",
+        count === value && "opacity-100",
         color
       )}
     >
@@ -57,7 +59,8 @@ const ClaimPopup = ({
   subtopicTitle: string;
   demographics: TDemographics;
 }) => {
-  const { vote, loading, count } = useVotes(data.id);
+  const [isOpen, setIsOpen] = useState(false);
+
   // Get the first quote's author information
   const firstQuote = data.quotes[0];
   const authorId = firstQuote?.authorId;
@@ -66,98 +69,104 @@ const ClaimPopup = ({
   const authorAgeGroup = demographics[authorId]?.ageGroup;
 
   return (
-    <Tooltip>
+    <Tooltip
+      open={isOpen}
+      onOpenChange={() => setIsOpen(!isOpen)}
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
       <TooltipTrigger asChild={asChild}>{trigger}</TooltipTrigger>
       <TooltipContent>
-        <div className="w-[80vw] sm:w-[300px] flex flex-col gap-4 text-wrap">
-          <div className="flex flex-col gap-0.5">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold">{subtopicTitle}</span>
-              <span className="text-xs text-right text-muted-foreground font-bold">
-                Claim #{data.index}
-              </span>
-            </div>
-            <span
-              className="text-base font-semibold mt-1 text-wrap"
-              style={{
-                color: `rgb(${TopicColors[colorIndex]})`,
-              }}
-            >
-              {data.content}
-            </span>
-            <div className="flex items-center gap-1 mt-1">
-              <VoteButton
-                color={"bg-red-500/10 text-red-700  hover:bg-red-500/20"}
-                vote={() => vote(-1)}
-                loading={loading}
-                count={count}
-                icon={BsEmojiDizzy}
-              >
-                Don&apos;t agree
-              </VoteButton>
-              <VoteButton
-                color={
-                  "bg-yellow-500/10 text-yellow-700  hover:bg-yellow-500/20"
-                }
-                vote={() => vote(0)}
-                loading={loading}
-                count={count}
-                icon={BsEmojiNeutral}
-              >
-                Not sure
-              </VoteButton>
-              <VoteButton
-                color={"bg-green-500/10 text-green-700  hover:bg-green-500/20"}
-                vote={() => vote(1)}
-                loading={loading}
-                count={count}
-                icon={BsEmojiSmile}
-              >
-                I agree
-              </VoteButton>
-            </div>
-          </div>
-          <hr />
-          <div>
-            <div className="flex items-center justify-between gap-1 text-muted-foreground">
-              <div className="flex items-center">
-                <Quote className="size-4" />
-                <span>Quotes</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <button className="rounded-full border border-border">
-                  <ChevronLeft className="size-4" />
-                </button>
-                <span>1/1</span>
-                <button className="rounded-full border border-border">
-                  <ChevronRight className="size-4" />
-                </button>
-              </div>
-            </div>
-            <div className="mt-2">
-              {data.quotes.map((quote) => (
-                <div key={quote.id}>
-                  <q className="text-sm italic">{quote.text}</q>
-                </div>
-              ))}
-            </div>
-            <div className="flex items-center gap-2 mb-0.5 mt-1">
-              <div className="h-5 w-5 rounded-full border border-border overflow-hidden">
-                <img src={blo(`0x${authorId}`)} />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-bold">{authorId?.substring(0, 8)}</span>
-                <span className="text-muted-foreground">
-                  {authorGender && authorAgeGroup
-                    ? `${authorGender
-                        .charAt(0)
-                        .toUpperCase()} • ${authorAgeGroup} years old`
-                    : "Unknown demographics"}
+        {isOpen ? (
+          <div className="w-[80vw] sm:w-[300px] flex flex-col gap-4 text-wrap">
+            <div className="flex flex-col gap-0.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold">{subtopicTitle}</span>
+                <span className="text-xs text-right text-muted-foreground font-bold">
+                  Claim #{data.index}
                 </span>
               </div>
+              <span
+                className="text-base font-semibold mt-1 text-wrap"
+                style={{
+                  color: `rgb(${TopicColors[colorIndex]})`,
+                }}
+              >
+                {data.content}
+              </span>
+              <div className="flex items-center gap-1 mt-1">
+                <VoteButton
+                  color={"bg-red-500/10 text-red-700  hover:bg-red-500/20"}
+                  claimId={data.id}
+                  value={-1}
+                  icon={BsEmojiDizzy}
+                >
+                  Don&apos;t agree
+                </VoteButton>
+                <VoteButton
+                  color={
+                    "bg-yellow-500/10 text-yellow-700  hover:bg-yellow-500/20"
+                  }
+                  claimId={data.id}
+                  value={0}
+                  icon={BsEmojiNeutral}
+                >
+                  Not sure
+                </VoteButton>
+                <VoteButton
+                  color={
+                    "bg-green-500/10 text-green-700  hover:bg-green-500/20"
+                  }
+                  claimId={data.id}
+                  value={1}
+                  icon={BsEmojiSmile}
+                >
+                  I agree
+                </VoteButton>
+              </div>
+            </div>
+            <hr />
+            <div>
+              <div className="flex items-center justify-between gap-1 text-muted-foreground">
+                <div className="flex items-center">
+                  <Quote className="size-4" />
+                  <span>Quotes</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <button className="rounded-full border border-border">
+                    <ChevronLeft className="size-4" />
+                  </button>
+                  <span>1/1</span>
+                  <button className="rounded-full border border-border">
+                    <ChevronRight className="size-4" />
+                  </button>
+                </div>
+              </div>
+              <div className="mt-2">
+                {data.quotes.map((quote) => (
+                  <div key={quote.id}>
+                    <q className="text-sm italic">{quote.text}</q>
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center gap-2 mb-0.5 mt-1">
+                <div className="h-5 w-5 rounded-full border border-border overflow-hidden">
+                  <img src={blo(`0x${authorId}`)} />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-bold">{authorId?.substring(0, 8)}</span>
+                  <span className="text-muted-foreground">
+                    {authorGender && authorAgeGroup
+                      ? `${authorGender
+                          .charAt(0)
+                          .toUpperCase()} • ${authorAgeGroup} years old`
+                      : "Unknown demographics"}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>{" "}
+        ) : null}
       </TooltipContent>
     </Tooltip>
   );
