@@ -2,8 +2,8 @@ import { useEffect, useState, useCallback } from "react";
 import { Client, Databases } from "appwrite";
 
 const client = new Client()
-  .setEndpoint("https://cloud.appwrite.io/v1") // Your Appwrite endpoint
-  .setProject("YOUR_PROJECT_ID"); // Your Appwrite project ID
+  .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
+  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!);
 
 const databases = new Databases(client);
 
