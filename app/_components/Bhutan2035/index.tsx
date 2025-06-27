@@ -34,11 +34,11 @@ const Bhutan2035 = async () => {
     const data = await fetch(
       "https://storage.googleapis.com/tttc-light-dev/f74c1daedd3e92cf335a0d614f88e0d929ebcd8289b6b8ca69b88b1711a58b2e"
     );
-    
+
     if (!data.ok) {
       throw new Error(`Failed to fetch data: ${data.status}`);
     }
-    
+
     const json = await data.json();
     const parsedData = parseTopics(json);
     topics = parsedData.topics;
@@ -73,6 +73,7 @@ const Bhutan2035 = async () => {
           the Bhutan NDI hackathon in 2025.
         </p>
       </div>
+      {JSON.stringify(demographics)}
       <TopicsDisplay
         topics={topics}
         demographics={demographics}
