@@ -35,7 +35,7 @@ const ClaimBoxes = ({
               trigger={
                 <button
                   className={cn(
-                    "relative group flex items-center justify-center border rounded-sm overflow-hidden",
+                    "relative group cursor-pointer flex items-center justify-center border rounded-sm overflow-hidden",
                     size === "sm"
                       ? "h-5 w-5 text-[0.6rem]"
                       : "h-10 w-10 text-[1rem]"

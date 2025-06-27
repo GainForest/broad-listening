@@ -58,16 +58,16 @@ const ClaimPopup = ({
           <hr />
           <div>
             <div className="flex items-center justify-between gap-1 text-muted-foreground">
-              <div className="flex items-center">
+              <div className="flex items-center gap-2">
                 <Quote className="size-4" />
                 <span>Quotes</span>
               </div>
               <div className="flex items-center gap-1">
-                <button className="rounded-full border border-border">
+                <button className="rounded-full border border-border cursor-pointer">
                   <ChevronLeft className="size-4" />
                 </button>
                 <span>1/1</span>
-                <button className="rounded-full border border-border">
+                <button className="rounded-full border border-border cursor-pointer">
                   <ChevronRight className="size-4" />
                 </button>
               </div>

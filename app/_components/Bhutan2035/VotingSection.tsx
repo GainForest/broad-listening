@@ -37,7 +37,7 @@ const VotingSection = ({ claimId }: { claimId: string }) => {
     <div className="flex items-center gap-1 mt-1">
       <button
         className={cn(
-          "flex flex-col items-center flex-1 bg-red-500/10 text-red-700 py-1 rounded-md gap-0.5 disabled:opacity-50 disabled:cursor-not-allowed",
+          "flex flex-col cursor-pointer items-center flex-1 bg-red-500/10 text-red-700 py-1 rounded-md gap-0.5 disabled:opacity-50 disabled:cursor-not-allowed",
           vote === -1 ? "bg-red-500 text-white" : "hover:bg-red-500/20"
         )}
         disabled={isDisabled}
@@ -54,7 +54,7 @@ const VotingSection = ({ claimId }: { claimId: string }) => {
       </button>
       <button
         className={cn(
-          "flex flex-col items-center flex-1 bg-yellow-500/10 text-yellow-700 py-1 rounded-md gap-0.5 disabled:opacity-50 disabled:cursor-not-allowed",
+          "flex flex-col cursor-pointer items-center flex-1 bg-yellow-500/10 text-yellow-700 py-1 rounded-md gap-0.5 disabled:opacity-50 disabled:cursor-not-allowed",
           vote === 0 ? "bg-yellow-600 text-white" : "hover:bg-yellow-500/20"
         )}
         disabled={isDisabled}
@@ -71,7 +71,7 @@ const VotingSection = ({ claimId }: { claimId: string }) => {
       </button>
       <button
         className={cn(
-          "flex flex-col items-center flex-1 bg-green-500/10 text-green-700 py-1 rounded-md gap-0.5 disabled:opacity-50 disabled:cursor-not-allowed",
+          "flex flex-col cursor-pointer items-center flex-1 bg-green-500/10 text-green-700 py-1 rounded-md gap-0.5 disabled:opacity-50 disabled:cursor-not-allowed",
           vote === 1 ? "bg-green-500 text-white" : "hover:bg-green-500/20"
         )}
         disabled={isDisabled}
