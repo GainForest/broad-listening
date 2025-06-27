@@ -2,6 +2,8 @@ import parseTopics from "./utils/parse-topics";
 import { TopicsDisplay } from "./TopicsDisplay";
 import fetchDemographics from "./utils/fetch-demographics";
 import { Info } from "lucide-react";
+import { TTopic } from "./TopicItem";
+import { TDemographics } from "./utils/fetch-demographics";
 
 // Function to get the base URL for API calls
 
@@ -23,12 +25,36 @@ import { Info } from "lucide-react";
 // };
 
 const Bhutan2035 = async () => {
-  const data = await fetch(
-    "https://storage.googleapis.com/tttc-light-dev/f74c1daedd3e92cf335a0d614f88e0d929ebcd8289b6b8ca69b88b1711a58b2e"
-  );
-  const json = await data.json();
-  const { topics, totalUniqueClaims, totalUniquePeople } = parseTopics(json);
-  const demographics = await fetchDemographics();
+  let topics: TTopic[] = [];
+  let totalUniqueClaims = 0;
+  let totalUniquePeople = 0;
+  let demographics: TDemographics = {};
+
+  try {
+    const data = await fetch(
+      "https://storage.googleapis.com/tttc-light-dev/f74c1daedd3e92cf335a0d614f88e0d929ebcd8289b6b8ca69b88b1711a58b2e"
+    );
+    
+    if (!data.ok) {
+      throw new Error(`Failed to fetch data: ${data.status}`);
+    }
+    
+    const json = await data.json();
+    const parsedData = parseTopics(json);
+    topics = parsedData.topics;
+    totalUniqueClaims = parsedData.totalUniqueClaims;
+    totalUniquePeople = parsedData.totalUniquePeople;
+  } catch (error) {
+    console.error("Error fetching topics data:", error);
+    // Fallback to empty data
+  }
+
+  try {
+    demographics = await fetchDemographics();
+  } catch (error) {
+    console.error("Error fetching demographics:", error);
+    // Fallback to empty demographics
+  }
 
   return (
     <div className="flex flex-col gap-2">

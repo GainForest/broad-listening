@@ -7,12 +7,7 @@ export type TDemographics = Record<
 >;
 
 const getBaseUrl = () => {
-  if (typeof window !== "undefined") {
-    // Client-side: use the current origin
-    return window.location.origin;
-  }
-  // Server-side: use environment variable or default to localhost:3000
-  return process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  return "https://bhutan.deepgov.org"
 };
 
 const fetchDemographics = async () => {
@@ -23,8 +18,11 @@ const fetchDemographics = async () => {
     fetch(`${baseUrl}/api/profile/age-groups`),
   ]);
 
+
   const genderJson = await genderData.json();
   const ageJson = await ageData.json();
+
+  console.log(baseUrl, genderData, ageData, "genderData, ageData")
 
   const demographics: TDemographics = {};
 
