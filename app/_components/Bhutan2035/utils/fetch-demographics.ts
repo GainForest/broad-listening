@@ -12,6 +12,7 @@ const getBaseUrl = () => {
     return window.location.origin;
   }
   // Server-side: use environment variable or default to localhost:3000
+  console.log(process.env.NEXT_PUBLIC_BASE_URL, "NEXT_PUBLIC_BASE_URL")
   return process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 };
 
