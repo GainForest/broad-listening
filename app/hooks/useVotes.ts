@@ -7,12 +7,16 @@ const client = new Client()
 
 const databases = new Databases(client);
 
-const DATABASE_ID = "default";
+const DATABASE_ID = "votes";
 const COLLECTION_ID = "votes";
 
 export function useVotes(claimId: string) {
   const [count, setCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
+
+  const userId = useUserId();
+
+  console.log(userId);
 
   // Fetch or create the vote document
   const fetchVotes = useCallback(async () => {
@@ -68,4 +72,20 @@ export function useVotes(claimId: string) {
     loading,
     vote,
   };
+}
+
+function useUserId() {
+  const [userId, setUserId] = useState<string | null>(
+    global?.localStorage?.getItem("userId")
+  );
+
+  useEffect(() => {
+    if (!userId) {
+      const userId = crypto.randomUUID();
+      global?.localStorage?.setItem("userId", userId);
+      setUserId(userId);
+    }
+  }, [userId]);
+
+  return userId;
 }
