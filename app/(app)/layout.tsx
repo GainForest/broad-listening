@@ -1,25 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, VT323 } from "next/font/google";
+import { Karla, Libre_Baskerville } from "next/font/google";
 import "./../globals.css";
 import Header from "../_components/Header";
 import Footer from "../_components/Footer";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NavigationControls from "../_components/NavigationControls";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const karla = Karla({
+  variable: "--font-karla",
   subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600", "700", "800"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const libreBaskerville = Libre_Baskerville({
+  variable: "--font-baskerville",
   subsets: ["latin"],
-});
-
-const vt323 = VT323({
-  variable: "--font-pixel",
-  weight: "400",
-  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -34,9 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${vt323.variable} antialiased`}
-      >
+      <body className={`${karla.variable} ${libreBaskerville.variable} antialiased`}>
         <TooltipProvider>
           <Header />
           <NavigationControls />

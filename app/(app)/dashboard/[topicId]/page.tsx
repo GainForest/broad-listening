@@ -13,7 +13,7 @@ const TopicPage = async ({
   params: Promise<{ topicId: string }>;
 }) => {
   const topicsPromise = fetch(
-  process.env.STORAGE_URL
+    process.env.STORAGE_URL!
   );
   const parsedTopicsPromise = topicsPromise.then((res) => {
     return res.json().then((json) => {
@@ -33,43 +33,72 @@ const TopicPage = async ({
   console.log(parsedTopics, "parsedTopics")
   if (!topic) redirect("/not-found");
 
+  // Calculate total quotes including similar claims
+  const totalQuotes = topic.subtopics.reduce((acc, subtopic) => {
+    return acc + subtopic.claims.reduce((claimAcc, claim) => {
+      const mainQuotes = claim.quotes?.length || 0;
+      const similarQuotes = claim.similarClaims?.reduce((similarAcc: number, similarClaim: any) => 
+        similarAcc + (similarClaim.quotes?.length || 0), 0) || 0;
+      return claimAcc + mainQuotes + similarQuotes;
+    }, 0);
+  }, 0);
+
+  // Calculate total people for this topic
+  const topicPeople = new Set<string>();
+  topic.subtopics.forEach((subtopic) => {
+    subtopic.claims.forEach((claim) => {
+      claim.quotes.forEach((quote) => {
+        topicPeople.add(quote.authorId);
+      });
+      claim.similarClaims?.forEach((similarClaim: any) => {
+        similarClaim.quotes?.forEach((quote: any) => {
+          topicPeople.add(quote.authorId);
+        });
+      });
+    });
+  });
+
+  const totalTopicClaims = topic.subtopics.reduce((acc, subtopic) => acc + subtopic.claims.length, 0);
+
   return (
-    <Container>
-      <h1 className="text-3xl font-bold">{topic.title}</h1>
-      <p className="text-xl text-muted-foreground">{topic.description}</p>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-4">
-        <div className="bg-accent rounded-lg p-2 flex flex-col text-primary relative overflow-hidden">
-          <span className="text-2xl font-bold">{parsedTopics.totalUniqueClaims}</span>
-          <span>Claims</span>
-          <MessageCircle className="size-12 absolute bottom-0 right-0 opacity-40" />
+    <Container className="space-y-8">
+      <header className="space-y-4">
+        <h1 className="text-3xl font-bold tracking-tight">{topic.title}</h1>
+        <p className="text-lg text-muted-foreground leading-relaxed">{topic.description}</p>
+      </header>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 flex flex-col text-blue-700 relative overflow-hidden border border-blue-200/50">
+          <span className="text-2xl font-bold">{totalTopicClaims}</span>
+          <span className="text-sm font-medium">Claims</span>
+          <MessageCircle className="size-8 absolute bottom-2 right-2 opacity-30" />
         </div>
-        <div className="bg-accent rounded-lg p-2 flex flex-col text-primary relative overflow-hidden">
-          <span className="text-2xl font-bold">{parsedTopics.totalUniquePeople}</span>
-          <span>People</span>
-          <User2 className="size-12 absolute bottom-0 right-0 opacity-40" />
+        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4 flex flex-col text-green-700 relative overflow-hidden border border-green-200/50">
+          <span className="text-2xl font-bold">{topicPeople.size}</span>
+          <span className="text-sm font-medium">People</span>
+          <User2 className="size-8 absolute bottom-2 right-2 opacity-30" />
         </div>
-        <div className="bg-accent rounded-lg p-2 flex flex-col text-primary relative overflow-hidden">
+        <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4 flex flex-col text-purple-700 relative overflow-hidden border border-purple-200/50">
           <span className="text-2xl font-bold">{topic.subtopics.length}</span>
-          <span>Subtopics</span>
-          <PiTreeStructure className="size-12 absolute bottom-0 right-0 opacity-40" />
+          <span className="text-sm font-medium">Subtopics</span>
+          <PiTreeStructure className="size-8 absolute bottom-2 right-2 opacity-30" />
         </div>
-        <div className="bg-accent rounded-lg p-2 flex flex-col text-primary relative overflow-hidden">
-          <span className="text-2xl font-bold">{topic.subtopics.reduce((acc, subtopic) => acc + subtopic.claims.length, 0)}</span>
-          <span>Quotes</span>
-          <Quote className="size-12 absolute bottom-0 right-0 opacity-40" />
+        <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-4 flex flex-col text-orange-700 relative overflow-hidden border border-orange-200/50">
+          <span className="text-2xl font-bold">{totalQuotes}</span>
+          <span className="text-sm font-medium">Quotes</span>
+          <Quote className="size-8 absolute bottom-2 right-2 opacity-30" />
         </div>
       </div>
-      <div className="mt-4">
-        <div className="flex flex-col gap-4">
-          {topic.subtopics.map((subtopic) => (
-            <SubTopic
-              key={subtopic.id}
-              subtopic={subtopic}
-              topic={topic}
-              demographics={demographics}
-            />
-          ))}
-        </div>
+
+      <div className="space-y-8">
+        {topic.subtopics.map((subtopic) => (
+          <SubTopic
+            key={subtopic.id}
+            subtopic={subtopic}
+            topic={topic}
+            demographics={demographics}
+          />
+        ))}
       </div>
     </Container>
   );

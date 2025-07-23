@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <Container outerClassName="flex-1" className="flex flex-col flex-1">
       <h1
-        className="text-6xl md:text-8xl font-bold font-pixel my-2"
+        className="text-6xl md:text-8xl font-bold font-serif my-2"
         style={{
           textShadow: "0 8px 16px rgba(0, 0, 0, 0.5)",
         }}

@@ -1,5 +1,6 @@
 import parseTopics from "./utils/parse-topics";
 import { TopicsDisplay } from "./TopicsDisplay";
+import TopicOverview from "./TopicOverview";
 import fetchDemographics from "./utils/fetch-demographics";
 import { Info } from "lucide-react";
 import { TTopic } from "./TopicItem";
@@ -60,7 +61,7 @@ const Bhutan2035 = async () => {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
       <header className="space-y-6">
         <h1 className="text-3xl font-bold tracking-tight">Envision Bhutan 2035</h1>
         <div className="space-y-3">
@@ -78,6 +79,9 @@ const Bhutan2035 = async () => {
           </p>
         </div>
       </header>
+      
+      <TopicOverview topics={topics} />
+      
       <TopicsDisplay
         topics={topics}
         demographics={demographics}

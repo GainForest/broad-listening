@@ -18,7 +18,7 @@ const Header = ({ cta }: { cta?: React.ReactNode }) => {
             height={32}
           />
         </div>
-        <span className="text-xl font-semibold tracking-tight">BroadListening</span>
+        <span className="text-xl font-bold tracking-tight font-serif">BroadListening</span>
       </Link>
       {cta}
     </Container>
