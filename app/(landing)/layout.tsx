@@ -18,7 +18,29 @@ const libreBaskerville = Libre_Baskerville({
 
 export const metadata: Metadata = {
   title: "Broad Listening",
-  description: "AI-powered report analysis platform",
+  description: "Transform interview data into actionable insights with AI-powered analysis. Visualize topics, demographics, and stakeholder perspectives in beautiful, interactive reports.",
+  openGraph: {
+    title: "Broad Listening",
+    description: "Transform interview data into actionable insights with AI-powered analysis. Visualize topics, demographics, and stakeholder perspectives in beautiful, interactive reports.",
+    url: "https://broadlistening.com",
+    siteName: "Broad Listening",
+    images: [
+      {
+        url: "/api/og?title=Broad%20Listening&description=Transform%20interview%20data%20into%20actionable%20insights%20with%20AI-powered%20analysis&type=landing",
+        width: 1200,
+        height: 630,
+        alt: "Broad Listening - Transform interview data into actionable insights",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Broad Listening",
+    description: "Transform interview data into actionable insights with AI-powered analysis",
+    images: ["/api/og?title=Broad%20Listening&description=Transform%20interview%20data%20into%20actionable%20insights%20with%20AI-powered%20analysis&type=landing"],
+  },
 };
 
 export default function RootLayout({

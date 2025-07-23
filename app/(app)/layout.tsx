@@ -19,8 +19,30 @@ const libreBaskerville = Libre_Baskerville({
 });
 
 export const metadata: Metadata = {
-  title: "BroadListening",
-  description: "Imagining Bhutan's Future Together",
+  title: "Broad Listening Dashboard",
+  description: "Explore analysis results and insights from interview data",
+  openGraph: {
+    title: "Broad Listening Dashboard",
+    description: "Explore analysis results and insights from interview data",
+    url: "https://broadlistening.com/dashboard",
+    siteName: "Broad Listening",
+    images: [
+      {
+        url: "/api/og?title=Broad%20Listening%20Dashboard&description=Explore%20analysis%20results%20and%20insights%20from%20interview%20data&type=dashboard",
+        width: 1200,
+        height: 630,
+        alt: "Broad Listening Dashboard - Explore analysis results",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Broad Listening Dashboard",
+    description: "Explore analysis results and insights from interview data",
+    images: ["/api/og?title=Broad%20Listening%20Dashboard&description=Explore%20analysis%20results%20and%20insights%20from%20interview%20data&type=dashboard"],
+  },
 };
 
 export default function RootLayout({

@@ -9,6 +9,109 @@ import fetchDemographics from "@/app/_components/BroadListening/utils/fetch-demo
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { TSimilarClaim, TQuote } from "@/app/_components/BroadListening/TopicItem";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ topicId: string }>;
+  searchParams: Promise<{ report?: string }>;
+}): Promise<Metadata> {
+  const searchParamsData = await searchParams;
+  const encodedReportUrl = searchParamsData.report;
+  
+  if (!encodedReportUrl) {
+    return {
+      title: "Topic Not Found - Broad Listening",
+      description: "The requested topic could not be found.",
+    };
+  }
+
+  try {
+    const reportUrl = decodeURIComponent(encodedReportUrl);
+    const topicsResponse = await fetch(reportUrl);
+    const topicsData = await topicsResponse.json();
+    const parsedTopics = parseTopics(topicsData);
+    
+    const paramsData = await params;
+    const topic = parsedTopics.topics.find(
+      (topic) => topic.id === paramsData.topicId
+    );
+
+    if (!topic) {
+      return {
+        title: "Topic Not Found - Broad Listening",
+        description: "The requested topic could not be found.",
+      };
+    }
+
+    // Calculate stats for OG image
+    const totalQuotes = topic.subtopics.reduce((acc, subtopic) => {
+      return acc + subtopic.claims.reduce((claimAcc, claim) => {
+        const mainQuotes = claim.quotes?.length || 0;
+        const similarQuotes = claim.similarClaims?.reduce((similarAcc: number, similarClaim: TSimilarClaim) => 
+          similarAcc + (similarClaim.quotes?.length || 0), 0) || 0;
+        return claimAcc + mainQuotes + similarQuotes;
+      }, 0);
+    }, 0);
+
+    const topicPeople = new Set<string>();
+    topic.subtopics.forEach((subtopic) => {
+      subtopic.claims.forEach((claim) => {
+        claim.quotes.forEach((quote) => {
+          topicPeople.add(quote.authorId);
+        });
+        claim.similarClaims?.forEach((similarClaim: TSimilarClaim) => {
+          similarClaim.quotes?.forEach((quote: TQuote) => {
+            topicPeople.add(quote.authorId);
+          });
+        });
+      });
+    });
+
+    const totalClaims = topic.subtopics.reduce((acc, subtopic) => acc + subtopic.claims.length, 0);
+    const stats = `${totalClaims},${topicPeople.size},${topic.subtopics.length},${totalQuotes}`;
+
+    const title = `${topic.title} - Broad Listening`;
+    const description = topic.description || `Analysis of ${topic.title} with ${totalClaims} claims from ${topicPeople.size} people`;
+
+    const ogUrl = `/api/og?title=${encodeURIComponent(topic.title)}&description=${encodeURIComponent(topic.description || '')}&type=topic&stats=${encodeURIComponent(stats)}`;
+
+    return {
+      title,
+      description,
+      openGraph: {
+        title,
+        description,
+        url: `https://broadlistening.com/dashboard/${paramsData.topicId}`,
+        siteName: "Broad Listening",
+        images: [
+          {
+            url: ogUrl,
+            width: 1200,
+            height: 630,
+            alt: `${topic.title} - Topic Analysis`,
+          },
+        ],
+        locale: "en_US",
+        type: "article",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: [ogUrl],
+      },
+    };
+  } catch (error) {
+    console.error("Error generating metadata:", error);
+    return {
+      title: "Topic Analysis - Broad Listening",
+      description: "Explore topic analysis and insights from interview data",
+    };
+  }
+}
 
 const TopicPage = async ({
   params,
