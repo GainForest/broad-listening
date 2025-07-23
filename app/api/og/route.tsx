@@ -13,10 +13,10 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type') || 'landing' // landing, dashboard, topic
     const stats = searchParams.get('stats') // For topic pages: "claims,people,subtopics,quotes"
 
-    // Load the hero image
-    const heroResponse = await fetch(new URL('../../../public/hero.png', import.meta.url))
-    const heroArrayBuffer = await heroResponse.arrayBuffer()
-    const heroBase64 = Buffer.from(heroArrayBuffer).toString('base64')
+    // Load the logo image
+    const logoResponse = await fetch(new URL('../../../public/broadlistening-logo.png', import.meta.url))
+    const logoArrayBuffer = await logoResponse.arrayBuffer()
+    const logoBase64 = Buffer.from(logoArrayBuffer).toString('base64')
 
     // Parse stats for topic pages
     let parsedStats = null
@@ -35,12 +35,12 @@ export async function GET(request: NextRequest) {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#1e293b',
-            backgroundImage: 'linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)',
+            backgroundColor: '#667eea',
+            backgroundImage: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             position: 'relative',
           }}
         >
-          {/* Background overlay */}
+          {/* Subtle pattern overlay */}
           <div
             style={{
               position: 'absolute',
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: 'rgba(0, 0, 0, 0.4)',
+              backgroundImage: 'radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 0%, transparent 50%)',
             }}
           />
           
@@ -66,17 +66,19 @@ export async function GET(request: NextRequest) {
               padding: '40px',
             }}
           >
-            {/* Hero Image */}
+            {/* Logo */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={`data:image/png;base64,${heroBase64}`}
-              alt="Broad Listening Hero"
+              src={`data:image/png;base64,${logoBase64}`}
+              alt="Broad Listening Logo"
               style={{
-                width: '120px',
+                width: '80px',
                 height: '80px',
                 marginBottom: '24px',
                 borderRadius: '12px',
-                objectFit: 'cover',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                padding: '8px',
+                border: '2px solid rgba(255, 255, 255, 0.2)',
               }}
             />
             
