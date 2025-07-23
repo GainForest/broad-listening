@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import useLocalStorage from "use-local-storage";
 import { v4 as uuidv4 } from "uuid";
 import { Databases } from "appwrite";
@@ -22,7 +22,7 @@ const useClaimVoteByUser = (claimId: string) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchUserVote = async () => {
+  const fetchUserVote = useCallback(async () => {
     if (!claimId || !userId) {
       setLoading(false);
       return;
@@ -64,7 +64,7 @@ const useClaimVoteByUser = (claimId: string) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [claimId, userId]);
 
   useEffect(() => {
     fetchUserVote();

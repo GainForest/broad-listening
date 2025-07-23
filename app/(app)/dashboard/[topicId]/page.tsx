@@ -15,9 +15,10 @@ const TopicPage = async ({
   searchParams,
 }: {
   params: Promise<{ topicId: string }>;
-  searchParams: { report?: string };
+  searchParams: Promise<{ report?: string }>;
 }) => {
-  const encodedReportUrl = searchParams.report;
+  const searchParamsData = await searchParams;
+  const encodedReportUrl = searchParamsData.report;
   
   if (!encodedReportUrl) {
     return (

@@ -10,6 +10,7 @@ import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { TDemographics } from "./utils/fetch-demographics";
 import VotingSection from "./VotingSection";
+import Image from "next/image";
 
 const ClaimPopup = ({
   trigger,
@@ -99,7 +100,7 @@ const ClaimPopup = ({
               >
                 {data.content}
               </h3>
-              <VotingSection claimId={data.id} />
+                              <VotingSection />
             </header>
             
             <div className="h-px bg-border"></div>
@@ -150,10 +151,12 @@ const ClaimPopup = ({
                     {authorId && (
                       <div className="flex items-center gap-3 pt-2">
                         <div className="h-6 w-6 rounded-full border overflow-hidden bg-muted">
-                          <img 
+                          <Image 
                             src={blo(`0x${authorId}`)} 
                             alt="Author avatar"
                             className="h-full w-full object-cover"
+                            width={24}
+                            height={24}
                           />
                         </div>
                         <div className="space-y-0.5">

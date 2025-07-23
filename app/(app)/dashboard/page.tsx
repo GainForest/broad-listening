@@ -8,11 +8,12 @@ import { Button } from "@/components/ui/button";
 export const dynamic = 'force-dynamic';
 
 interface DashboardPageProps {
-  searchParams: { report?: string };
+  searchParams: Promise<{ report?: string }>;
 }
 
-const DashboardPage = ({ searchParams }: DashboardPageProps) => {
-  const encodedReportUrl = searchParams.report;
+const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
+  const searchParamsData = await searchParams;
+  const encodedReportUrl = searchParamsData.report;
 
   if (!encodedReportUrl) {
     return (
