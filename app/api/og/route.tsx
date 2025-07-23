@@ -13,10 +13,7 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type') || 'landing' // landing, dashboard, topic
     const stats = searchParams.get('stats') // For topic pages: "claims,people,subtopics,quotes"
 
-    // Load the logo image
-    const logoResponse = await fetch(new URL('../../../public/broadlistening-logo.png', import.meta.url))
-    const logoArrayBuffer = await logoResponse.arrayBuffer()
-    const logoBase64 = Buffer.from(logoArrayBuffer).toString('base64')
+    // We'll use a simple text logo instead of loading an image to avoid edge runtime issues
 
     // Parse stats for topic pages
     let parsedStats = null
@@ -67,20 +64,24 @@ export async function GET(request: NextRequest) {
             }}
           >
             {/* Logo */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={`data:image/png;base64,${logoBase64}`}
-              alt="Broad Listening Logo"
+            <div
               style={{
                 width: '80px',
                 height: '80px',
                 marginBottom: '24px',
                 borderRadius: '12px',
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                padding: '8px',
-                border: '2px solid rgba(255, 255, 255, 0.2)',
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '24px',
+                fontWeight: 'bold',
+                color: 'white',
               }}
-            />
+            >
+              BL
+            </div>
             
             {/* Title */}
             <h1

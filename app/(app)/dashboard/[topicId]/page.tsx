@@ -30,7 +30,23 @@ export async function generateMetadata({
 
   try {
     const reportUrl = decodeURIComponent(encodedReportUrl);
-    const topicsResponse = await fetch(reportUrl);
+    
+    // Add timeout and error handling for external fetch
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+    
+    const topicsResponse = await fetch(reportUrl, {
+      signal: controller.signal,
+      headers: {
+        'User-Agent': 'BroadListening-Bot/1.0',
+      },
+    });
+    clearTimeout(timeoutId);
+    
+    if (!topicsResponse.ok) {
+      throw new Error(`Failed to fetch report: ${topicsResponse.status}`);
+    }
+    
     const topicsData = await topicsResponse.json();
     const parsedTopics = parseTopics(topicsData);
     
@@ -140,8 +156,16 @@ const TopicPage = async ({
   }
 
   const reportUrl = decodeURIComponent(encodedReportUrl);
-  const topicsPromise = fetch(reportUrl);
+  
+  const topicsPromise = fetch(reportUrl, {
+    headers: {
+      'User-Agent': 'BroadListening-Bot/1.0',
+    },
+  });
   const parsedTopicsPromise = topicsPromise.then((res) => {
+    if (!res.ok) {
+      throw new Error(`Failed to fetch report: ${res.status}`);
+    }
     return res.json().then((json) => {
       return parseTopics(json);
     });
