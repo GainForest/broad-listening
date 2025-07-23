@@ -44,7 +44,7 @@ export async function generateMetadata({
     const title = `Analysis Dashboard - ${totalTopics} Topics, ${totalPeople} People - Broad Listening`;
     const description = `Explore detailed analysis of ${totalTopics} topics with insights from ${totalPeople} participants. Interactive visualizations and demographic breakdowns.`;
 
-    const ogUrl = `/api/og?title=${encodeURIComponent(`Report Analysis Dashboard`)}&description=${encodeURIComponent(`${totalTopics} topics analyzed from ${totalPeople} participants`)}&type=dashboard`;
+    const ogUrl = `https://www.broadlistening.org/api/og?title=${encodeURIComponent(`Report Analysis Dashboard`)}&description=${encodeURIComponent(`${totalTopics} topics analyzed from ${totalPeople} participants`)}&type=dashboard`;
 
     return {
       title,
@@ -52,7 +52,7 @@ export async function generateMetadata({
       openGraph: {
         title,
         description,
-        url: `https://broadlistening.com/dashboard`,
+        url: `https://www.broadlistening.org/dashboard`,
         siteName: "Broad Listening",
         images: [
           {

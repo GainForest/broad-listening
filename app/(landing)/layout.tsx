@@ -22,11 +22,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Broad Listening",
     description: "Transform interview data into actionable insights with AI-powered analysis. Visualize topics, demographics, and stakeholder perspectives in beautiful, interactive reports.",
-    url: "https://broadlistening.com",
+    url: "https://www.broadlistening.org",
     siteName: "Broad Listening",
     images: [
       {
-        url: "/api/og?title=Broad%20Listening&description=Transform%20interview%20data%20into%20actionable%20insights%20with%20AI-powered%20analysis&type=landing",
+        url: "https://www.broadlistening.org/api/og?title=Broad%20Listening&description=Transform%20interview%20data%20into%20actionable%20insights%20with%20AI-powered%20analysis&type=landing",
         width: 1200,
         height: 630,
         alt: "Broad Listening - Transform interview data into actionable insights",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Broad Listening",
     description: "Transform interview data into actionable insights with AI-powered analysis",
-    images: ["/api/og?title=Broad%20Listening&description=Transform%20interview%20data%20into%20actionable%20insights%20with%20AI-powered%20analysis&type=landing"],
+    images: ["https://www.broadlistening.org/api/og?title=Broad%20Listening&description=Transform%20interview%20data%20into%20actionable%20insights%20with%20AI-powered%20analysis&type=landing"],
   },
 };
 

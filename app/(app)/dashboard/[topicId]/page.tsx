@@ -76,7 +76,7 @@ export async function generateMetadata({
     const title = `${topic.title} - Broad Listening`;
     const description = topic.description || `Analysis of ${topic.title} with ${totalClaims} claims from ${topicPeople.size} people`;
 
-    const ogUrl = `/api/og?title=${encodeURIComponent(topic.title)}&description=${encodeURIComponent(topic.description || '')}&type=topic&stats=${encodeURIComponent(stats)}`;
+    const ogUrl = `https://www.broadlistening.org/api/og?title=${encodeURIComponent(topic.title)}&description=${encodeURIComponent(topic.description || '')}&type=topic&stats=${encodeURIComponent(stats)}`;
 
     return {
       title,
@@ -84,7 +84,7 @@ export async function generateMetadata({
       openGraph: {
         title,
         description,
-        url: `https://broadlistening.com/dashboard/${paramsData.topicId}`,
+        url: `https://www.broadlistening.org/dashboard/${paramsData.topicId}`,
         siteName: "Broad Listening",
         images: [
           {

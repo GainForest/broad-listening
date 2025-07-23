@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://broadlistening.com/sitemap.xml
+Sitemap: https://www.broadlistening.org/sitemap.xml
 
 # Allow all crawlers to access the site
 # Disallow test pages
