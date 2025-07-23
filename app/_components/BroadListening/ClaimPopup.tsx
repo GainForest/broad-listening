@@ -145,7 +145,7 @@ const ClaimPopup = ({
                 {currentQuote ? (
                   <>
                     <blockquote className="text-sm leading-relaxed italic text-foreground/90 pl-3 border-l-2 border-muted">
-                      "{currentQuote.text}"
+                      &quot;{currentQuote.text}&quot;
                     </blockquote>
                     {authorId && (
                       <div className="flex items-center gap-3 pt-2">

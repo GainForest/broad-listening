@@ -8,6 +8,7 @@ import SubTopic from "./SubTopic";
 import fetchDemographics from "@/app/_components/BroadListening/utils/fetch-demographics";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { TSimilarClaim, TQuote } from "@/app/_components/BroadListening/TopicItem";
 
 const TopicPage = async ({
   params,
@@ -58,7 +59,7 @@ const TopicPage = async ({
   const totalQuotes = topic.subtopics.reduce((acc, subtopic) => {
     return acc + subtopic.claims.reduce((claimAcc, claim) => {
       const mainQuotes = claim.quotes?.length || 0;
-      const similarQuotes = claim.similarClaims?.reduce((similarAcc: number, similarClaim: any) => 
+      const similarQuotes = claim.similarClaims?.reduce((similarAcc: number, similarClaim: TSimilarClaim) => 
         similarAcc + (similarClaim.quotes?.length || 0), 0) || 0;
       return claimAcc + mainQuotes + similarQuotes;
     }, 0);
@@ -71,8 +72,8 @@ const TopicPage = async ({
       claim.quotes.forEach((quote) => {
         topicPeople.add(quote.authorId);
       });
-      claim.similarClaims?.forEach((similarClaim: any) => {
-        similarClaim.quotes?.forEach((quote: any) => {
+      claim.similarClaims?.forEach((similarClaim: TSimilarClaim) => {
+        similarClaim.quotes?.forEach((quote: TQuote) => {
           topicPeople.add(quote.authorId);
         });
       });

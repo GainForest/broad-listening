@@ -144,7 +144,7 @@ const TopicItem = ({
           <div className="space-y-2">
             <h4 className="text-sm font-medium text-foreground">Subtopics</h4>
             <div className="flex flex-wrap gap-1">
-              {data.subtopics.slice(0, 5).map((subtopic, index) => (
+              {data.subtopics.slice(0, 5).map((subtopic) => (
                 <SubtopicPopup
                   key={subtopic.id}
                   data={subtopic}

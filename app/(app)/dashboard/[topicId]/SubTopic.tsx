@@ -2,7 +2,7 @@
 
 import ClaimBoxes from "@/app/_components/BroadListening/ClaimBoxes";
 import ClaimPopup from "@/app/_components/BroadListening/ClaimPopup";
-import { TSubtopic, TTopic } from "@/app/_components/BroadListening/TopicItem";
+import { TSubtopic, TTopic, TClaim, TSimilarClaim } from "@/app/_components/BroadListening/TopicItem";
 import { TDemographics } from "@/app/_components/BroadListening/utils/fetch-demographics";
 import { Button } from "@/components/ui/button";
 import { Link, Quote } from "lucide-react";
@@ -29,9 +29,9 @@ const SubTopic = ({
   const remainingClaims = subtopic.claims.length - INITIAL_CLAIMS_SHOW;
   const shouldShowMoreButton = !showAllClaims && remainingClaims > 0;
 
-  const getQuotesCount = (claim: any) => {
+  const getQuotesCount = (claim: TClaim) => {
     const mainQuotes = claim.quotes?.length || 0;
-    const similarQuotes = claim.similarClaims?.reduce((acc: number, similarClaim: any) => 
+    const similarQuotes = claim.similarClaims?.reduce((acc: number, similarClaim: TSimilarClaim) => 
       acc + (similarClaim.quotes?.length || 0), 0) || 0;
     return mainQuotes + similarQuotes;
   };

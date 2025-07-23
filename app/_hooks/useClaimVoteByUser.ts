@@ -68,7 +68,7 @@ const useClaimVoteByUser = (claimId: string) => {
 
   useEffect(() => {
     fetchUserVote();
-  }, [claimId, userId]);
+  }, [claimId, userId, fetchUserVote]);
 
   // Real-time subscription
   useEffect(() => {
