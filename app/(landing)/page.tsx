@@ -4,7 +4,8 @@ import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { BarChart3, FileText, MessageCircle, Users, Brain, Link } from "lucide-react";
+import { BarChart3, FileText, MessageCircle, Users, Brain, Link, Search, Share2 } from "lucide-react";
+import Image from "next/image";
 
 export default function Home() {
   const [storageUrl, setStorageUrl] = useState("");
@@ -60,11 +61,43 @@ export default function Home() {
     }
   ];
 
-  const exampleUrls = [
-    "https://storage.googleapis.com/bucket/report.json",
-    "https://raw.githubusercontent.com/user/repo/data.json",
-    "https://api.example.com/reports/123"
+  const useCases = [
+    {
+      title: "Envision Bhutan 2035",
+      description: "National visioning consultation with citizens across Bhutan",
+      category: "National Planning",
+      url: "https://storage.googleapis.com/tttc-light-dev/f6d673c83bf46557b0a1e3401f109bb10fad76d354a4eb0af0264daf90c93ce1",
+      gradient: "from-blue-500 to-purple-600"
+    },
+    {
+      title: "Community Climate Action",
+      description: "Local climate resilience planning with diverse stakeholders",
+      category: "Environmental Policy",
+      url: "#", // Placeholder for future use case
+      gradient: "from-green-500 to-teal-600"
+    },
+    {
+      title: "Healthcare Reform Insights",
+      description: "Patient and provider perspectives on healthcare accessibility",
+      category: "Public Health",
+      url: "#", // Placeholder for future use case
+      gradient: "from-red-500 to-pink-600"
+    },
+    {
+      title: "Urban Planning Voices",
+      description: "Resident input on sustainable city development initiatives",
+      category: "Municipal Planning",
+      url: "#", // Placeholder for future use case
+      gradient: "from-orange-500 to-yellow-600"
+    }
   ];
+
+  const handleUseCaseClick = (useCase: typeof useCases[0]) => {
+    if (useCase.url !== "#") {
+      const encodedUrl = encodeURIComponent(useCase.url);
+      router.push(`/dashboard?report=${encodedUrl}`);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
@@ -136,49 +169,138 @@ export default function Home() {
 
               {/* Data Format Info */}
               <div className="mt-8 pt-6 border-t border-gray-100">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                    <Link className="size-4" />
-                    Supported Data Sources
-                  </div>
-                  <div className="grid gap-2">
-                    {exampleUrls.map((url, index) => (
-                      <div key={index} className="text-xs font-mono text-gray-500 bg-gray-50 rounded-lg px-3 py-2">
-                        {url}
-                      </div>
-                    ))}
-                  </div>
-                  <p className="text-xs text-gray-500">
-                    Your data should be publicly accessible JSON following our schema. 
-                    Works with Google Storage, GitHub, AWS S3, and any CORS-enabled endpoint.
-                  </p>
-                </div>
+                <p className="text-xs text-gray-500 text-center">
+                  Your data should be publicly accessible JSON following our schema. 
+                  Works with Google Storage, GitHub, AWS S3, and any CORS-enabled endpoint.
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Benefits Section */}
+          {/* Use Cases Gallery */}
+          <div className="mt-16 space-y-8">
+            <div className="text-center space-y-4">
+              <h2 className="text-2xl font-light text-gray-900">
+                Use Cases
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Explore real-world applications of democratic listening across different domains
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {useCases.map((useCase, index) => (
+                <div
+                  key={index}
+                  className={`group relative overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-lg transition-all duration-300 ${
+                    useCase.url !== "#" ? "cursor-pointer" : ""
+                  }`}
+                  onClick={() => handleUseCaseClick(useCase)}
+                >
+                  {/* Header with Image or Gradient */}
+                  <div className={`h-32 relative ${useCase.title === "Envision Bhutan 2035" ? "bg-gray-100" : `bg-gradient-to-br ${useCase.gradient}`}`}>
+                    {useCase.title === "Envision Bhutan 2035" ? (
+                      <Image
+                        src="/bhutan.png"
+                        alt="Bhutan landscape"
+                        fill
+                        className="object-cover"
+                      />
+                    ) : null}
+                    
+                    {useCase.url !== "#" && (
+                      <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm rounded-full p-1.5">
+                        <Link className="size-3 text-white" />
+                      </div>
+                    )}
+                    {useCase.url === "#" && (
+                      <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                        <span className="text-white/80 text-xs font-medium">Coming Soon</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="p-4 space-y-3">
+                    <div className="space-y-1">
+                      <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                        {useCase.category}
+                      </div>
+                      <h3 className="font-medium text-gray-900 group-hover:text-blue-700 transition-colors">
+                        {useCase.title}
+                      </h3>
+                    </div>
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                      {useCase.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* About DeepGov Section */}
           <div className="mt-16 text-center space-y-6">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl font-light text-gray-900 mb-6">
+                About DeepGov
+              </h2>
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 text-left">
+                <p className="text-lg text-gray-700 leading-relaxed mb-4">
+                  DeepGov is an open source collective pioneering democratic AI for governance and capital allocation. 
+                  We believe in transparent, participatory technologies that amplify citizen voices and strengthen 
+                  democratic institutions.
+                </p>
+                <p className="text-gray-600 leading-relaxed">
+                  Our tools help governments, organizations, and communities make better decisions by democratizing 
+                  access to sophisticated analysis and ensuring that every voice is heard in the decision-making process.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* How it works Section */}
+          <div className="mt-16 text-center space-y-8">
             <h2 className="text-2xl font-light text-gray-900">
-              Why Use Broad Listening?
+              How it works
             </h2>
+            
             <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-              <div className="space-y-2">
-                <h3 className="font-medium text-gray-900">Save Time</h3>
-                <p className="text-sm text-gray-600">
-                  Automatically process hours of interview data in seconds
+              <div className="space-y-4">
+                <div className="flex items-center justify-center">
+                  <div className="bg-blue-100 rounded-full p-3 flex items-center justify-center">
+                    <span className="text-lg font-bold text-blue-600">1</span>
+                  </div>
+                </div>
+                <h3 className="font-medium text-gray-900">Gather</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  Gather and analyze qualitative data from a group of any size. Process unstructured text, long form responses, 
+                  and video interviews, or prompt participants over Telegram with a custom chatbot.
                 </p>
               </div>
-              <div className="space-y-2">
-                <h3 className="font-medium text-gray-900">Find Patterns</h3>
-                <p className="text-sm text-gray-600">
-                  Discover hidden connections and themes across stakeholder groups
+              
+              <div className="space-y-4">
+                <div className="flex items-center justify-center">
+                  <div className="bg-green-100 rounded-full p-3 flex items-center justify-center">
+                    <span className="text-lg font-bold text-green-600">2</span>
+                  </div>
+                </div>
+                <h3 className="font-medium text-gray-900">Explore</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  Explore from core themes within the data all the way down to individual claims and quotes made by each 
+                  participant.
                 </p>
               </div>
-              <div className="space-y-2">
-                <h3 className="font-medium text-gray-900">Share Insights</h3>
-                <p className="text-sm text-gray-600">
-                  Generate beautiful, interactive reports for stakeholders
+              
+              <div className="space-y-4">
+                <div className="flex items-center justify-center">
+                  <div className="bg-purple-100 rounded-full p-3 flex items-center justify-center">
+                    <span className="text-lg font-bold text-purple-600">3</span>
+                  </div>
+                </div>
+                <h3 className="font-medium text-gray-900">Share</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  Share your findings and the voices within your communities to inform direction and decision making.
                 </p>
               </div>
             </div>
