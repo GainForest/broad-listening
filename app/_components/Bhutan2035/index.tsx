@@ -31,9 +31,12 @@ const Bhutan2035 = async () => {
   let demographics: TDemographics = {};
 
   try {
-    const data = await fetch(
-      "https://storage.googleapis.com/tttc-light-dev/f74c1daedd3e92cf335a0d614f88e0d929ebcd8289b6b8ca69b88b1711a58b2e"
-    );
+    const storageUrl = process.env.STORAGE_URL;
+    if (!storageUrl) {
+      throw new Error("STORAGE_URL environment variable is not set");
+    }
+    
+    const data = await fetch(storageUrl);
 
     if (!data.ok) {
       throw new Error(`Failed to fetch data: ${data.status}`);
@@ -57,29 +60,30 @@ const Bhutan2035 = async () => {
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      <h2 className="text-2xl font-bold">Envision Bhutan 2035</h2>
-      <div className="flex flex-col gap-0.5">
-        <h3 className="text-xl font-bold">Summary</h3>
-        <span className="flex items-center gap-1 text-sm text-muted-foreground">
-          <Info className="size-4" />
-          <span>
-            The summary is written by the report creators, while the rest is
-            AI-generated, excluding quotes.
-          </span>
-        </span>
-        <p className="text-justify">
-          DeepGov future visioneering of a Bhutan 2035 with participants during
-          the Bhutan NDI hackathon in 2025.
-        </p>
-      </div>
+    <div className="space-y-8">
+      <header className="space-y-6">
+        <h1 className="text-3xl font-bold tracking-tight">Envision Bhutan 2035</h1>
+        <div className="space-y-3">
+          <h2 className="text-xl font-semibold text-foreground/90">Summary</h2>
+          <div className="flex items-start gap-3 p-4 bg-muted/30 rounded-lg">
+            <Info className="size-4 mt-0.5 text-muted-foreground flex-shrink-0" />
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              The summary is written by the report creators, while the rest is
+              AI-generated, excluding quotes.
+            </p>
+          </div>
+          <p className="text-base leading-relaxed text-foreground/80">
+            DeepGov future visioneering of a Bhutan 2035 with participants during
+            the Bhutan NDI hackathon in 2025.
+          </p>
+        </div>
+      </header>
       <TopicsDisplay
         topics={topics}
         demographics={demographics}
         totalUniqueClaims={totalUniqueClaims}
         totalUniquePeople={totalUniquePeople}
       />
-      ;
     </div>
   );
 };

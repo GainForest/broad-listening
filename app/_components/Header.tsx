@@ -6,19 +6,19 @@ import React from "react";
 const Header = ({ cta }: { cta?: React.ReactNode }) => {
   return (
     <Container
-      outerClassName="sticky top-2 px-2 mb-8 z-50"
-      className="border border-border rounded-xl bg-background/70 backdrop-blur-lg py-2 px-2 md:px-2 flex items-center justify-between gap-2 shadow-lg"
+      outerClassName="sticky top-4 px-4 mb-12 z-50"
+      className="bg-background/95 backdrop-blur-sm py-3 px-4 flex items-center justify-between gap-4"
     >
-      <Link href="/" className="flex items-center gap-2">
-        <div className="h-8 w-8 full border border-border rounded-full overflow-hidden">
+      <Link href="/" className="flex items-center gap-3">
+        <div className="h-8 w-8 rounded-md overflow-hidden">
           <Image
             src="/broadlistening-logo.png"
             alt="BroadListening Logo"
-            width={64}
-            height={64}
+            width={32}
+            height={32}
           />
         </div>
-        <span className="text-lg font-bold font-pixel">BroadListening</span>
+        <span className="text-xl font-semibold tracking-tight">BroadListening</span>
       </Link>
       {cta}
     </Container>

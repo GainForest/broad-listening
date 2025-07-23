@@ -66,6 +66,27 @@ const parseTopics = (
                     userIdToIndexMappings.size + 1,
                 };
               }),
+              similarClaims: (claim.similarClaims || []).map((similarClaim: any) => ({
+                id: similarClaim.id,
+                title: similarClaim.title,
+                number: similarClaim.number,
+                quotes: (similarClaim.quotes || []).map((quote: any) => {
+                  userIdToIndexMappings.set(
+                    quote.reference.interview,
+                    userIdToIndexMappings.get(quote.reference.interview) ??
+                      userIdToIndexMappings.size + 1
+                  );
+                  return {
+                    id: quote.id,
+                    text: quote.text,
+                    authorId: quote.reference.interview,
+                    authorIndex:
+                      userIdToIndexMappings.get(quote.reference.interview) ??
+                      userIdToIndexMappings.size + 1,
+                  };
+                }),
+                similarClaims: [], // Avoid deep nesting for now
+              })),
             };
           }),
         };

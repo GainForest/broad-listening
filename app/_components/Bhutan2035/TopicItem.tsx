@@ -18,6 +18,15 @@ export type TClaim = {
   index: number;
   content: string;
   quotes: TQuote[];
+  similarClaims?: TSimilarClaim[];
+};
+
+export type TSimilarClaim = {
+  id: string;
+  title: string;
+  quotes: TQuote[];
+  number: number;
+  similarClaims?: TSimilarClaim[];
 };
 
 export type TSubtopic = {
@@ -110,58 +119,63 @@ const TopicItem = ({
   const totalPeople = calculateTotalPeople(data);
 
   return (
-    <div className="p-3 flex flex-col md:flex-row gap-3">
-      <div className="flex-1">
-        <ClaimBoxes
-          data={data}
-          highlightedClaimIds={highlightedClaimIds}
-          demographics={demographics}
-        />
-      </div>
-      <div className="flex-1">
-        <h4 className="font-bold">{data.title}</h4>
-        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-          <MessageCircle className="size-4" /> {totalClaims} claims by{" "}
-          {totalPeople} people.
+    <article className="bg-card border border-border rounded-lg p-6 space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="order-2 lg:order-1">
+          <ClaimBoxes
+            data={data}
+            highlightedClaimIds={highlightedClaimIds}
+            demographics={demographics}
+          />
         </div>
-        <p className="text-sm mt-2">{data.description}</p>
-        <b className="text-sm font-bold">Subtopics:&nbsp;</b>
-        {data.subtopics.map((subtopic, index) => {
-          if (index > 4) return null;
-          return (
-            <SubtopicPopup
-              key={index}
-              data={subtopic}
-              colorIndex={data.colorIndex}
-              asChild
-              onHoverStart={() => setHighlightedSubtopicId(subtopic.id)}
-              onHoverEnd={() => setHighlightedSubtopicId(null)}
-              trigger={
+        <div className="order-1 lg:order-2 space-y-4">
+          <header className="space-y-2">
+            <h3 className="text-lg font-semibold leading-tight">{data.title}</h3>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <MessageCircle className="size-4" />
+              <span>{totalClaims} claims by {totalPeople} people</span>
+            </div>
+          </header>
+          
+          <p className="text-sm leading-relaxed text-foreground/80">{data.description}</p>
+          
+          <div className="space-y-2">
+            <h4 className="text-sm font-medium text-foreground">Subtopics</h4>
+            <div className="flex flex-wrap gap-1">
+              {data.subtopics.slice(0, 5).map((subtopic, index) => (
+                <SubtopicPopup
+                  key={subtopic.id}
+                  data={subtopic}
+                  colorIndex={data.colorIndex}
+                  asChild
+                  onHoverStart={() => setHighlightedSubtopicId(subtopic.id)}
+                  onHoverEnd={() => setHighlightedSubtopicId(null)}
+                  trigger={
+                    <a
+                      className="inline-flex items-center text-xs px-2 py-1 rounded-md bg-muted/50 hover:bg-muted transition-colors"
+                      style={{
+                        color: `rgb(${TopicColors[data.colorIndex]})`,
+                      }}
+                      href={`/dashboard/${data.id}#${subtopic.id}`}
+                    >
+                      {subtopic.title}
+                    </a>
+                  }
+                />
+              ))}
+              {data.subtopics.length > 5 && (
                 <a
-                  key={subtopic.title}
-                  className="text-sm hover:underline mr-1"
-                  style={{
-                    color: `rgb(${TopicColors[data.colorIndex]})`,
-                  }}
-                  href={`/dashboard/${data.id}#${subtopic.id}`}
+                  className="inline-flex items-center text-xs px-2 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary/15 transition-colors"
+                  href={`/dashboard/${data.id}`}
                 >
-                  {subtopic.title}
-                  {index < data.subtopics.length - 1 && ","}
+                  +{data.subtopics.length - 5} more
                 </a>
-              }
-            />
-          );
-        })}
-        {data.subtopics.length > 4 && (
-          <a
-            className="rounded-full flex items-center gap-1 text-primary text-sm underline"
-            href={`/dashboard/${data.id}`}
-          >
-            View all subtopics
-          </a>
-        )}
+              )}
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </article>
   );
 };
 

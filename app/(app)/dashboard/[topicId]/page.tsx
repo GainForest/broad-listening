@@ -13,7 +13,7 @@ const TopicPage = async ({
   params: Promise<{ topicId: string }>;
 }) => {
   const topicsPromise = fetch(
-    "https://storage.googleapis.com/tttc-light-dev/f74c1daedd3e92cf335a0d614f88e0d929ebcd8289b6b8ca69b88b1711a58b2e"
+  process.env.STORAGE_URL
   );
   const parsedTopicsPromise = topicsPromise.then((res) => {
     return res.json().then((json) => {

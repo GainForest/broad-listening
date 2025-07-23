@@ -63,132 +63,127 @@ export const TopicsDisplay = ({
   };
 
   return (
-    <div className="flex flex-col gap-0.5">
-      <h3 className="text-xl font-bold">Claims</h3>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3 text-sm text-muted-foreground">
-          <span className="flex items-center gap-1">
-            <Book className="size-4" />
-            {topics.length} Topics
-          </span>
-          <div className="h-4 w-0.5 bg-muted"></div>
-          <span className="flex items-center gap-1">
-            <MessageCircle className="size-4" />
-            {totalUniqueClaims} claims
-          </span>
-          <div className="h-4 w-0.5 bg-muted"></div>
-          <span className="flex items-center gap-1">
-            <Users className="size-4" />
-            {totalUniquePeople} People
-          </span>
-        </div>
-        <span className="flex items-center gap-1">
-          <Switch
-            id="filters"
-            className="cursor-pointer"
-            checked={mode === "demographics"}
-            onCheckedChange={() =>
-              setMode(mode === "demographics" ? "topics" : "demographics")
-            }
-          />
-
-          <label
-            htmlFor="filters"
-            className="font-bold cursor-pointer text-sm text-muted-foreground"
-          >
-            Filters
-          </label>
-        </span>
-      </div>
-      {mode === "demographics" && (
-        <div className="flex items-center justify-between w-full mt-4">
-          <div className="flex flex-col items-start">
-            <span className="text-sm text-muted-foreground">
-              Filter by gender
+    <section className="space-y-6">
+      <div className="space-y-4">
+        <h2 className="text-2xl font-semibold tracking-tight">Claims</h2>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-6 text-sm text-muted-foreground">
+            <span className="flex items-center gap-2">
+              <Book className="size-4" />
+              <span className="font-medium">{topics.length} Topics</span>
             </span>
-            <div className="border border-border rounded-md flex items-center overflow-hidden">
-              <button
-                className={cn(
-                  "transition-all text-xs px-2 py-1 hover:bg-blue-500/10",
-                  genderFilter.has("male") &&
-                    "bg-blue-500/20 hover:bg-blue-500/30 text-blue-500"
-                )}
-                onClick={() => updateGenderFilter("male")}
-              >
-                Male (
-                {
-                  Object.values(demographics).filter((d) => d.gender === "male")
-                    .length
-                }
-                )
-              </button>
-              <button
-                className={cn(
-                  "transition-all text-xs px-2 py-1 hover:bg-pink-500/10",
-                  genderFilter.has("female") &&
-                    "bg-pink-500/20 hover:bg-pink-500/30 text-pink-500"
-                )}
-                onClick={() => updateGenderFilter("female")}
-              >
-                Female (
-                {
-                  Object.values(demographics).filter(
-                    (d) => d.gender === "female"
-                  ).length
-                }
-                )
-              </button>
-            </div>
+            <span className="flex items-center gap-2">
+              <MessageCircle className="size-4" />
+              <span className="font-medium">{totalUniqueClaims} Claims</span>
+            </span>
+            <span className="flex items-center gap-2">
+              <Users className="size-4" />
+              <span className="font-medium">{totalUniquePeople} People</span>
+            </span>
           </div>
-          <div className="flex flex-col items-end">
-            <span className="text-sm text-muted-foreground">Filter by age</span>
-            <div className="border border-border rounded-md flex items-center overflow-hidden">
-              {ageGroups.map((age) => {
-                return (
-                  <button
-                    key={age}
-                    className={cn(
-                      "transition-all text-xs px-2 py-1 hover:bg-primary/10",
-                      ageFilter.has(age) &&
-                        "bg-primary/20 hover:bg-primary/30 text-primary"
-                    )}
-                    onClick={() => updateAgeFilter(age)}
-                  >
-                    {age} (
-                    {
-                      Object.values(demographics).filter(
-                        (d) => d.ageGroup === age
-                      ).length
-                    }
-                    )
-                  </button>
-                );
-              })}
+          <label className="flex items-center gap-3 cursor-pointer">
+            <span className="text-sm font-medium text-muted-foreground">Filters</span>
+            <Switch
+              checked={mode === "demographics"}
+              onCheckedChange={() =>
+                setMode(mode === "demographics" ? "topics" : "demographics")
+              }
+            />
+          </label>
+        </div>
+      </div>
+
+      {mode === "demographics" && (
+        <div className="bg-muted/20 border border-border rounded-lg p-6 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-3">
+              <h3 className="text-sm font-medium text-foreground">Gender</h3>
+              <div className="flex gap-2">
+                <button
+                  className={cn(
+                    "px-3 py-2 text-xs font-medium rounded-md border transition-all",
+                    genderFilter.has("male")
+                      ? "bg-blue-50 border-blue-200 text-blue-700"
+                      : "bg-background border-border text-muted-foreground hover:border-border/80"
+                  )}
+                  onClick={() => updateGenderFilter("male")}
+                >
+                  Male (
+                  {
+                    Object.values(demographics).filter((d) => d.gender === "male")
+                      .length
+                  }
+                  )
+                </button>
+                <button
+                  className={cn(
+                    "px-3 py-2 text-xs font-medium rounded-md border transition-all",
+                    genderFilter.has("female")
+                      ? "bg-pink-50 border-pink-200 text-pink-700"
+                      : "bg-background border-border text-muted-foreground hover:border-border/80"
+                  )}
+                  onClick={() => updateGenderFilter("female")}
+                >
+                  Female (
+                  {
+                    Object.values(demographics).filter(
+                      (d) => d.gender === "female"
+                    ).length
+                  }
+                  )
+                </button>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <h3 className="text-sm font-medium text-foreground">Age Groups</h3>
+              <div className="flex flex-wrap gap-2">
+                {ageGroups.map((age) => {
+                  return (
+                    <button
+                      key={age}
+                      className={cn(
+                        "px-3 py-2 text-xs font-medium rounded-md border transition-all",
+                        ageFilter.has(age)
+                          ? "bg-primary/10 border-primary/20 text-primary"
+                          : "bg-background border-border text-muted-foreground hover:border-border/80"
+                      )}
+                      onClick={() => updateAgeFilter(age)}
+                    >
+                      {age} (
+                      {
+                        Object.values(demographics).filter(
+                          (d) => d.ageGroup === age
+                        ).length
+                      }
+                      )
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
       )}
-      <div>
-        <div className="flex flex-col border border-border rounded-xl divide-y mt-3">
-          {topics.map((topic) => {
-            return (
-              <TopicItem
-                key={topic.title}
-                data={topic}
-                demographics={demographics}
-                filter={
-                  mode === "demographics"
-                    ? {
-                        gender: Array.from(genderFilter),
-                        age: Array.from(ageFilter),
-                      }
-                    : undefined
-                }
-              />
-            );
-          })}
-        </div>
+
+      <div className="space-y-4">
+        {topics.map((topic) => {
+          return (
+            <TopicItem
+              key={topic.title}
+              data={topic}
+              demographics={demographics}
+              filter={
+                mode === "demographics"
+                  ? {
+                      gender: Array.from(genderFilter),
+                      age: Array.from(ageFilter),
+                    }
+                  : undefined
+              }
+            />
+          );
+        })}
       </div>
-    </div>
+    </section>
   );
 };
