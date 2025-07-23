@@ -4,7 +4,7 @@ import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { BarChart3, FileText, MessageCircle, Users, Brain, Link, Search, Share2 } from "lucide-react";
+import { BarChart3, FileText, MessageCircle, Users, Brain, Link } from "lucide-react";
 import Image from "next/image";
 
 export default function Home() {
