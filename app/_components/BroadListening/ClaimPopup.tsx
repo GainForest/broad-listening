@@ -9,7 +9,7 @@ import { blo } from "blo";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { TDemographics } from "./utils/fetch-demographics";
-import VotingSection from "./VotingSection";
+
 
 const ClaimPopup = ({
   trigger,
@@ -99,7 +99,7 @@ const ClaimPopup = ({
               >
                 {data.content}
               </h3>
-              <VotingSection claimId={data.id} />
+
             </header>
             
             <div className="h-px bg-border"></div>

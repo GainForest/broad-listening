@@ -14,19 +14,17 @@ export type TQuote = {
 };
 
 export type TClaim = {
-  id: string;
   index: number;
+  id: string;
   content: string;
   quotes: TQuote[];
-  similarClaims?: TSimilarClaim[];
-};
-
-export type TSimilarClaim = {
-  id: string;
-  title: string;
-  quotes: TQuote[];
-  number: number;
-  similarClaims?: TSimilarClaim[];
+  similarClaims?: {
+    id: string;
+    title: string;
+    number: number;
+    quotes: TQuote[];
+    similarClaims: never[];
+  }[];
 };
 
 export type TSubtopic = {
@@ -59,59 +57,25 @@ const calculateTotalPeople = (topic: TTopic) => {
 const TopicItem = ({
   data,
   demographics,
-  filter,
   reportUrl,
 }: {
   data: TTopic;
   demographics: TDemographics;
-  filter?: {
-    gender: TDemographics[string]["gender"][];
-    age: TDemographics[string]["ageGroup"][];
-  };
   reportUrl: string;
 }) => {
   const [highlightedSubtopicId, setHighlightedSubtopicId] = useState<
     string | null
   >(null);
 
-  const authorMatchesFilter = (authorId: string) => {
-    if (!filter) return true;
-    const gender = demographics[authorId]?.gender;
-    const age = demographics[authorId]?.ageGroup;
-    if (!gender || !age) return false;
-
-    const matchesGender = filter.gender.includes(gender);
-    const matchesAge = filter.age.includes(age);
-    if (matchesAge !== matchesGender) return true;
-    return matchesGender && matchesAge;
-  };
-
-  const filteredClaimIds: string[] = [];
-  data.subtopics.forEach((subtopic) => {
-    subtopic.claims.forEach((claim) => {
-      claim.quotes.forEach((quote) => {
-        if (authorMatchesFilter(quote.authorId)) {
-          filteredClaimIds.push(claim.id);
-        }
-      });
-    });
-  });
-
   const getHighlightedSubtopicClaimIds = (subtopicId: string) => {
     const subtopic = data.subtopics.find(
       (subtopic) => subtopic.id === subtopicId
     );
     if (!subtopic) return [];
-    return subtopic.claims
-      .filter((claim) => {
-        return filteredClaimIds.includes(claim.id);
-      })
-      .map((claim) => claim.id);
+    return subtopic.claims.map((claim) => claim.id);
   };
 
-  const highlightedClaimIds = filter
-    ? new Set(filteredClaimIds)
-    : highlightedSubtopicId
+  const highlightedClaimIds = highlightedSubtopicId
     ? new Set(getHighlightedSubtopicClaimIds(highlightedSubtopicId))
     : new Set<string>();
 
