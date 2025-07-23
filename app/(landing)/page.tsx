@@ -67,7 +67,16 @@ export default function Home() {
       description: "National visioning consultation with citizens across Bhutan",
       category: "National Planning",
       url: "https://storage.googleapis.com/tttc-light-dev/f6d673c83bf46557b0a1e3401f109bb10fad76d354a4eb0af0264daf90c93ce1",
-      gradient: "from-blue-500 to-purple-600"
+      gradient: "from-blue-500 to-purple-600",
+      image: "/bhutan.png"
+    },
+    {
+      title: "NEAR House of Stake",
+      description: "Governance transparency and delegate selection in NEAR's House of Stake governance system",
+      category: "Blockchain Governance",
+      url: "https://storage.googleapis.com/tttc-light-dev/e57284abd0c58f716e82f42217afb6ccb9b2a9f66046e864d696af0c698b0d6e",
+      gradient: "from-green-500 to-teal-600",
+      image: "/near.png"
     },
     {
       title: "Community Climate Action",
@@ -82,13 +91,6 @@ export default function Home() {
       category: "Public Health",
       url: "#", // Placeholder for future use case
       gradient: "from-red-500 to-pink-600"
-    },
-    {
-      title: "Urban Planning Voices",
-      description: "Resident input on sustainable city development initiatives",
-      category: "Municipal Planning",
-      url: "#", // Placeholder for future use case
-      gradient: "from-orange-500 to-yellow-600"
     }
   ];
 
@@ -198,11 +200,11 @@ export default function Home() {
                   onClick={() => handleUseCaseClick(useCase)}
                 >
                   {/* Header with Image or Gradient */}
-                  <div className={`h-32 relative ${useCase.title === "Envision Bhutan 2035" ? "bg-gray-100" : `bg-gradient-to-br ${useCase.gradient}`}`}>
-                    {useCase.title === "Envision Bhutan 2035" ? (
+                  <div className={`h-32 relative ${useCase.image ? "bg-gray-100" : `bg-gradient-to-br ${useCase.gradient}`}`}>
+                    {useCase.image ? (
                       <Image
-                        src="/bhutan.png"
-                        alt="Bhutan landscape"
+                        src={useCase.image}
+                        alt={`${useCase.title} cover`}
                         fill
                         className="object-cover"
                       />
