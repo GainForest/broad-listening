@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <Container outerClassName="mt-16">
       <div className="flex items-center justify-between py-4 border-t border-border text-muted-foreground text-sm">
-        <span>BroadListening.org</span>
+        <span>deepgov.org</span>
         <span>All rights reserved</span>
       </div>
     </Container>

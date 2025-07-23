@@ -1,9 +1,9 @@
 "use client";
 
-import ClaimBoxes from "@/app/_components/Bhutan2035/ClaimBoxes";
-import ClaimPopup from "@/app/_components/Bhutan2035/ClaimPopup";
-import { TSubtopic, TTopic } from "@/app/_components/Bhutan2035/TopicItem";
-import { TDemographics } from "@/app/_components/Bhutan2035/utils/fetch-demographics";
+import ClaimBoxes from "@/app/_components/BroadListening/ClaimBoxes";
+import ClaimPopup from "@/app/_components/BroadListening/ClaimPopup";
+import { TSubtopic, TTopic } from "@/app/_components/BroadListening/TopicItem";
+import { TDemographics } from "@/app/_components/BroadListening/utils/fetch-demographics";
 import { Button } from "@/components/ui/button";
 import { Link, Quote } from "lucide-react";
 import React, { useState } from "react";

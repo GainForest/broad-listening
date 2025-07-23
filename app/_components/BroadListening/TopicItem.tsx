@@ -60,6 +60,7 @@ const TopicItem = ({
   data,
   demographics,
   filter,
+  reportUrl,
 }: {
   data: TTopic;
   demographics: TDemographics;
@@ -67,6 +68,7 @@ const TopicItem = ({
     gender: TDemographics[string]["gender"][];
     age: TDemographics[string]["ageGroup"][];
   };
+  reportUrl: string;
 }) => {
   const [highlightedSubtopicId, setHighlightedSubtopicId] = useState<
     string | null
@@ -156,7 +158,7 @@ const TopicItem = ({
                       style={{
                         color: `rgb(${TopicColors[data.colorIndex]})`,
                       }}
-                      href={`/dashboard/${data.id}#${subtopic.id}`}
+                      href={`/dashboard/${data.id}?report=${encodeURIComponent(reportUrl)}#${subtopic.id}`}
                     >
                       {subtopic.title}
                     </a>
@@ -166,7 +168,7 @@ const TopicItem = ({
               {data.subtopics.length > 5 && (
                 <a
                   className="inline-flex items-center text-xs px-2 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary/15 transition-colors"
-                  href={`/dashboard/${data.id}`}
+                  href={`/dashboard/${data.id}?report=${encodeURIComponent(reportUrl)}`}
                 >
                   +{data.subtopics.length - 5} more
                 </a>

@@ -26,10 +26,13 @@ const parseTopics = (
   topics: TTopic[];
   totalUniqueClaims: number;
   totalUniquePeople: number;
+  title: string;
+  description: string;
 } => {
   const claimIdToIndexMappings: Map<string, number> = new Map();
   const userIdToIndexMappings: Map<string, number> = new Map();
-  const topics = data.data[1].topics;
+  const mainData = data.data[1];
+  const topics = mainData.topics;
   const result = topics.map((topic: any) => {
     return {
       id: topic.id,
@@ -98,6 +101,8 @@ const parseTopics = (
     topics: result,
     totalUniqueClaims: claimIdToIndexMappings.size,
     totalUniquePeople: userIdToIndexMappings.size,
+    title: mainData.title || "Envision Bhutan 2035",
+    description: mainData.description || "DeepGov future visioneering",
   };
 };
 

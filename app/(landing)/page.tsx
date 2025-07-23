@@ -1,36 +1,77 @@
+"use client";
+
 import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
-import { FaTelegram } from "react-icons/fa6";
-import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const [storageUrl, setStorageUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const validateUrl = (url: string): boolean => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!storageUrl.trim()) return;
+
+    setIsLoading(true);
+    
+    if (!validateUrl(storageUrl.trim())) {
+      alert("Please provide a valid URL.");
+      setIsLoading(false);
+      return;
+    }
+
+    // Redirect to dashboard with the full URL (encoded)
+    const encodedUrl = encodeURIComponent(storageUrl.trim());
+    router.push(`/dashboard?report=${encodedUrl}`);
+  };
+
   return (
-    <Container outerClassName="flex-1" className="flex flex-col flex-1">
-      <h1
-        className="text-6xl md:text-8xl font-bold font-serif my-2"
-        style={{
-          textShadow: "0 8px 16px rgba(0, 0, 0, 0.5)",
-        }}
-      >
-        Envisioning
-        <br /> <span className="text-primary">Bhutan</span>
-        <br /> <span>2035</span>
-      </h1>
-      {/* <div className="flex-1"></div> */}
-      <div
-        className="font-sans text-xl bg-background/70 backdrop-blur-lg max-w-lg w-full p-4 rounded-xl mt-8 mb-8"
-        style={{
-          textShadow: "0px 0px 4px rgba(255 255 255 / 1)",
-        }}
-      >
-        Meet TakinAI, your guide to imagining Bhutan&apos;s digital future.{" "}
-        <Link href="https://t.me/TakinAIBot" target="_blank">
-          <Button className="w-full mt-2 h-10">
-            <FaTelegram />
-            Talk to TakinAI on Telegram
-          </Button>
-        </Link>
-      </div>
-    </Container>
+    <div className="min-h-screen flex items-center justify-center bg-white">
+      <Container className="w-full max-w-md">
+        <div className="space-y-8">
+          <div className="text-center space-y-2">
+            <h1 className="text-2xl font-light text-gray-900">
+              Broad Listening
+            </h1>
+            <p className="text-sm text-gray-500">
+              Enter your report URL to get started
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <input
+                id="storage-url"
+                type="url"
+                value={storageUrl}
+                onChange={(e) => setStorageUrl(e.target.value)}
+                placeholder="https://storage.googleapis.com/..."
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                required
+              />
+            </div>
+
+            <Button 
+              type="submit" 
+              className="w-full py-3"
+              disabled={isLoading || !storageUrl.trim()}
+            >
+              {isLoading ? "Loading..." : "View Report"}
+            </Button>
+          </form>
+        </div>
+      </Container>
+    </div>
   );
 }

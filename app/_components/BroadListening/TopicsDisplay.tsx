@@ -12,11 +12,13 @@ export const TopicsDisplay = ({
   totalUniqueClaims,
   totalUniquePeople,
   demographics,
+  reportUrl,
 }: {
   topics: TTopic[];
   totalUniqueClaims: number;
   totalUniquePeople: number;
   demographics: TDemographics;
+  reportUrl: string;
 }) => {
   const [mode, setMode] = useState<"topics" | "demographics">("topics");
   const [genderFilter, setGenderFilter] = useState<
@@ -172,6 +174,7 @@ export const TopicsDisplay = ({
               key={topic.title}
               data={topic}
               demographics={demographics}
+              reportUrl={reportUrl}
               filter={
                 mode === "demographics"
                   ? {

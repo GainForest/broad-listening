@@ -1,20 +1,41 @@
-import parseTopics from "@/app/_components/Bhutan2035/utils/parse-topics";
+import parseTopics from "@/app/_components/BroadListening/utils/parse-topics";
 import Container from "@/components/ui/container";
 import { MessageCircle, Quote, User2 } from "lucide-react";
 import { redirect } from "next/navigation";
 import React from "react";
 import { PiTreeStructure } from "react-icons/pi";
 import SubTopic from "./SubTopic";
-import fetchDemographics from "@/app/_components/Bhutan2035/utils/fetch-demographics";
+import fetchDemographics from "@/app/_components/BroadListening/utils/fetch-demographics";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const TopicPage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ topicId: string }>;
+  searchParams: { report?: string };
 }) => {
-  const topicsPromise = fetch(
-    process.env.STORAGE_URL!
-  );
+  const encodedReportUrl = searchParams.report;
+  
+  if (!encodedReportUrl) {
+    return (
+      <Container className="flex flex-col gap-4 items-center justify-center min-h-[50vh]">
+        <div className="text-center space-y-4">
+          <h1 className="text-2xl font-bold">Report URL Required</h1>
+          <p className="text-muted-foreground">
+            Please provide a report URL to view this topic.
+          </p>
+          <Link href="/">
+            <Button>Enter Report URL</Button>
+          </Link>
+        </div>
+      </Container>
+    );
+  }
+
+  const reportUrl = decodeURIComponent(encodedReportUrl);
+  const topicsPromise = fetch(reportUrl);
   const parsedTopicsPromise = topicsPromise.then((res) => {
     return res.json().then((json) => {
       return parseTopics(json);

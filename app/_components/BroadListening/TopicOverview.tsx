@@ -7,6 +7,7 @@ import Link from "next/link";
 
 interface TopicOverviewProps {
   topics: TTopic[];
+  reportUrl: string;
 }
 
 const calculateTotalPeople = (topic: TTopic) => {
@@ -21,7 +22,7 @@ const calculateTotalPeople = (topic: TTopic) => {
   return people.size;
 };
 
-const TopicOverview = ({ topics }: TopicOverviewProps) => {
+const TopicOverview = ({ topics, reportUrl }: TopicOverviewProps) => {
   // Calculate people count for each topic and sort by participation (descending)
   const topicsWithPeople = topics
     .map((topic) => ({
@@ -33,37 +34,37 @@ const TopicOverview = ({ topics }: TopicOverviewProps) => {
   const maxPeople = Math.max(...topicsWithPeople.map(t => t.peopleCount));
 
   return (
-    <section className="space-y-6">
+    <section className="space-y-4">
       <h2 className="text-2xl font-semibold tracking-tight">Overview</h2>
-      <div className="space-y-2">
+      <div className="space-y-1">
         {topicsWithPeople.map((topic) => {
           const progressPercentage = maxPeople > 0 ? (topic.peopleCount / maxPeople) * 100 : 0;
           
           return (
             <Link
               key={topic.id}
-              href={`/dashboard/${topic.id}`}
+              href={`/dashboard/${topic.id}?report=${encodeURIComponent(reportUrl)}`}
               className="group block"
             >
-              <div className="py-4 px-3 hover:bg-muted/30 rounded-lg transition-all duration-200 border border-transparent hover:border-border/50">
-                <div className="space-y-3">
+              <div className="py-2 px-3 hover:bg-muted/30 rounded transition-all duration-200">
+                <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-medium text-foreground group-hover:text-primary transition-colors">
+                    <h3 className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
                       {topic.title}
                     </h3>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <span className="font-medium">{topic.peopleCount} people</span>
-                      <ChevronRight className="size-4 group-hover:translate-x-1 transition-transform duration-200" />
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <span className="font-medium">{topic.peopleCount}</span>
+                      <ChevronRight className="size-3 group-hover:translate-x-0.5 transition-transform duration-200" />
                     </div>
                   </div>
                   <div className="relative">
-                    <div className="h-2 bg-muted rounded-full overflow-hidden">
+                    <div className="h-1 bg-muted rounded-full overflow-hidden">
                       <div
-                        className="h-full rounded-full transition-all duration-500 ease-out group-hover:opacity-90"
+                        className="h-full rounded-full transition-all duration-300 ease-out"
                         style={{
                           width: `${progressPercentage}%`,
                           backgroundColor: `rgb(${TopicColors[topic.colorIndex]})`,
-                          opacity: '0.8'
+                          opacity: '0.7'
                         }}
                       />
                     </div>
