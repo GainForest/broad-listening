@@ -7,6 +7,7 @@ import React from "react";
 
 const NavigationControls = () => {
   const router = useRouter();
+  
   return (
     <Container className="flex items-center py-4 border-b border-gray-50">
       <Button 

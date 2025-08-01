@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import TopicItem, { TTopic } from "./TopicItem";
-import { Book, MessageCircle, Users } from "lucide-react";
+import { Book, MessageCircle, Users, Users as UsersIcon } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { TDemographics } from "./utils/fetch-demographics";
+import { useRouter } from "next/navigation";
 
 export const TopicsDisplay = ({
   topics,
@@ -20,6 +22,7 @@ export const TopicsDisplay = ({
   demographics: TDemographics;
   reportUrl: string;
 }) => {
+  const router = useRouter();
   const [mode, setMode] = useState<"topics" | "demographics">("topics");
   const [genderFilter, setGenderFilter] = useState<
     Set<TDemographics[string]["gender"]>
@@ -27,6 +30,10 @@ export const TopicsDisplay = ({
   const [ageFilter, setAgeFilter] = useState<
     Set<TDemographics[string]["ageGroup"]>
   >(new Set());
+
+  const handleSpeakersClick = () => {
+    router.push(`/dashboard/speakers?report=${encodeURIComponent(reportUrl)}`);
+  };
 
   const ageGroups = [
     "<18",
@@ -68,31 +75,42 @@ export const TopicsDisplay = ({
     <section className="space-y-6">
       <div className="space-y-4">
         <h2 className="text-2xl font-semibold tracking-tight">Claims</h2>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-6 text-sm text-muted-foreground">
-            <span className="flex items-center gap-2">
-              <Book className="size-4" />
-              <span className="font-medium">{topics.length} Topics</span>
-            </span>
-            <span className="flex items-center gap-2">
-              <MessageCircle className="size-4" />
-              <span className="font-medium">{totalUniqueClaims} Claims</span>
-            </span>
-            <span className="flex items-center gap-2">
-              <Users className="size-4" />
-              <span className="font-medium">{totalUniquePeople} People</span>
-            </span>
+                  <div className="flex items-center justify-between">
+            <div className="flex items-center gap-6 text-sm text-muted-foreground">
+              <span className="flex items-center gap-2">
+                <Book className="size-4" />
+                <span className="font-medium">{topics.length} Topics</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <MessageCircle className="size-4" />
+                <span className="font-medium">{totalUniqueClaims} Claims</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <Users className="size-4" />
+                <span className="font-medium">{totalUniquePeople} People</span>
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleSpeakersClick}
+                className="text-xs"
+              >
+                <UsersIcon className="size-3 mr-1" />
+                By Speaker
+              </Button>
+              <label className="flex items-center gap-3 cursor-pointer">
+                <span className="text-sm font-medium text-muted-foreground">Filters</span>
+                <Switch
+                  checked={mode === "demographics"}
+                  onCheckedChange={() =>
+                    setMode(mode === "demographics" ? "topics" : "demographics")
+                  }
+                />
+              </label>
+            </div>
           </div>
-          <label className="flex items-center gap-3 cursor-pointer">
-            <span className="text-sm font-medium text-muted-foreground">Filters</span>
-            <Switch
-              checked={mode === "demographics"}
-              onCheckedChange={() =>
-                setMode(mode === "demographics" ? "topics" : "demographics")
-              }
-            />
-          </label>
-        </div>
       </div>
 
       {mode === "demographics" && (
